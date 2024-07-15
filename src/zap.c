@@ -7417,7 +7417,7 @@ makewish()
 
 		char bigbuf[512];
 		Sprintf(bigbuf, "wished for %s on turn %ld", bufcpy, moves);
-		if (strlen(bigbuf) + strlen(u.uconduct.wishlist) < wishsavelength) {
+		if (strlen(bigbuf) + strlen(u.uconduct.wishlist) < WISHSAVELENGTH) {
 			if (hadwish) {
 				strcat(u.uconduct.wishlist, "\n");
 				strcat(u.uconduct.wishlist, bigbuf);

@@ -651,7 +651,7 @@ extern const struct PotionRecipe potionrecipes[]; /* table of fusions */
 # define debug_pline if (0) pline
 #endif
 
-#define DEVTEAM_EMAIL "eslunna@gmail.com"
-#define DEVTEAM_URL "https://github.com/elunna/hackem"
+#define DEVTEAM_EMAIL "nethack-cleaner@proton.me"
+#define DEVTEAM_URL "https://github.com/nethack-cleaner/HackEM"
 
 #endif /* HACK_H */

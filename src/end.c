@@ -951,9 +951,9 @@ time_t when; /* date+time at end of game */
     putstr(NHW_DUMPTXT, 0, "");
     list_genocided('d', FALSE); /* 'd' => 'y' */
     putstr(NHW_DUMPTXT, 0, "");
-	Sprintf(pbuf, " Damage Taken: %d", u.uconduct.damagetaken);
+	Sprintf(pbuf, " Damage Taken: %s", thousands_int(u.uconduct.damagetaken));
 	putstr(0, 0, pbuf);
-	Sprintf(pbuf, " Damage Dealt: %d", u.uconduct.damagedealt);
+	Sprintf(pbuf, " Damage Dealt: %s", thousands_int(u.uconduct.damagedealt));
 	putstr(0, 0, pbuf);
 	if (u.uconduct.wishes) {
 		putstr(0, ATR_HEADING, "Wishes Made:");

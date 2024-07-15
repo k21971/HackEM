@@ -2047,11 +2047,6 @@ register struct monst *mtmp;
             if (!rn2(4))
                 (void) mongets(mtmp, LIGHT_ARMOR);
             break;
-        case PM_DRAUGR:
-            mongets(mtmp, (rn2(4) ? WAR_HAMMER : RUNESWORD));
-            if (!rn2(4))
-                (void) mongets(mtmp, LIGHT_ARMOR);
-            break;
         case PM_SKELETAL_PIRATE:
             otmp = rn2(2) ? mksobj(SCIMITAR, FALSE, FALSE) :
                           mksobj(KNIFE, FALSE, FALSE);
@@ -4294,6 +4289,8 @@ int otyp;
         if (mpickobj(mtmp, otmp)) {
             /* otmp was freed via merging with something else */
             otmp = (struct obj *) 0;
+		} else {
+			obfree(otmp, (struct obj *) 0);
         }
         return spe;
     } else

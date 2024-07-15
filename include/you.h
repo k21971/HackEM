@@ -13,6 +13,8 @@
 #endif
 #include "skills.h"
 
+#define wishsavelength 10000
+
 /*** Substructures ***/
 
 struct RoleName {
@@ -115,7 +117,7 @@ struct u_conduct {     /* number of times... */
     long uncelibate;   /* interacted with a foocubus */
     long techuse;      /* Used your techniques */
     long shk;       /* Did business with a shopkeeper */
-	char wishlist[10000];
+	char wishlist[wishsavelength];
 	int damagedealt;
 	int damagetaken;
     /* genocides already listed at end of game */

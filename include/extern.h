@@ -3416,6 +3416,10 @@ E boolean destroyable_oclass(char);
 E int FDECL(delugehitsm, (struct monst *, int));
 E void FDECL(scatter_chains, (int, int));
 
+/* ### dlb.c ### */
+
+E char *FDECL(thousands_int, (int));
+
 #endif /* !MAKEDEFS_C && !LEV_LEX_C */
 
 #undef E

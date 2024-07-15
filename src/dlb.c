@@ -250,6 +250,8 @@ lib_dlb_init(VOID_ARGS)
 #ifdef VERSION_IN_DLB_FILENAME
     build_dlb_filename((const char *) 0);
 #endif
+	extern char *FDECL(thousands_int, (int));
+	
     /* To open more than one library, add open library calls here. */
     if (!open_library(DLBFILE, &dlb_libs[0]))
         return FALSE;
@@ -282,6 +284,47 @@ const char *lf;
     return dlbfilename;
 }
 #endif
+
+char *
+thousands_int(num)
+int num;
+{
+	boolean stayin = TRUE;
+	static char hold[100];
+	char hold2[100];
+	int onum;
+	int mult;
+	int i;
+	int timesin;
+	timesin = 0;
+	mult = 0;
+	onum = num;
+	while (stayin && timesin < 5) { //max out timesin at 5 to avoid some infinite loop cause by Demo :)
+		while (num >= 1000) {
+			num = num / 1000;
+			mult++;
+		}
+		if (!timesin) {
+			Sprintf(hold, "%d", num);
+		} else {
+			strcat(hold, ",");
+			Sprintf(hold2, "%d", num);
+			strcat(hold, hold2);
+		}
+		if (mult) {
+			for (i = 0; i < mult; i++) {
+				num = (num * 1000);
+			}
+			num = onum - num;
+			onum = num;
+		} else {
+			stayin = FALSE;
+		}
+		mult = 0;
+		timesin++;
+	}
+	return hold;
+}
 
 /*ARGSUSED*/
 STATIC_OVL boolean

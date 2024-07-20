@@ -1166,6 +1166,9 @@ get_rabil()
     case PM_DOPPELGANGER:
         return dop_abil;
         break;
+	case PM_DRAUGR:
+		return dra_abil;
+		break;
     case PM_HUMAN:
         return hum_abil;
         break;
@@ -1198,9 +1201,9 @@ int oldlevel, newlevel;
 
     abil = role_abil(Role_switch);
     rabil = get_rabil();
-    
     while (abil || rabil) {
         /* Have we finished with the intrinsics list? */
+
         if (!abil || !abil->ability) {
             /* Try the race intrinsics */
             if (!rabil || !rabil->ability)

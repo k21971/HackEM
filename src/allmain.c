@@ -896,7 +896,7 @@ int wtcap;
             && orc_can_regen() 
             && vamp_can_regen()
             && (!uarmc || (uarmc && uarmc->otyp != POISONOUS_CLOAK))
-            && (encumbrance_ok || U_CAN_REGEN()) && !Is_valley(&u.uz)
+            && (encumbrance_ok || U_CAN_REGEN()) && (!Is_valley(&u.uz) || Race_if(PM_DRAUGR))
             && !infidel_no_amulet) {
             /*
             * KMH, balance patch -- New regeneration code

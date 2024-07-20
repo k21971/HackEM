@@ -694,6 +694,8 @@ curses_character_dialog(const char **choices, const char *prompt)
                 curletter = toupper(curletter);
             }
         }
+		if (!strcmp(choices[count], "draugr"))
+            curletter = 'Z';
 
         identifier.a_int = (count + 1); /* Must be non-zero */
         curses_add_menu(wid, NO_GLYPH, &identifier, curletter, 0,

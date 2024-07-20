@@ -188,6 +188,7 @@ extern struct trobj Ice_Mage[];
 extern struct trobj Jedi[];
 extern struct trobj Knight[];
 extern struct trobj Monk[];
+extern struct trobj Draugr_Monk[];
 extern struct trobj Necromancer[];
 extern struct trobj Priest[];
 extern struct trobj Ranger[];
@@ -225,6 +226,18 @@ struct trobj subInfidel[] = {
     { SCR_CHARGING, 0, SCROLL_CLASS, 1, 0 },
     { SPE_DRAIN_LIFE, 0, SPBOOK_CLASS, 1, 0 },
     { UNDEF_TYP, UNDEF_SPE, SPBOOK_CLASS, 1, 0 },
+    { FIRE_HORN, UNDEF_SPE, TOOL_CLASS, 1, 0 },
+    { OILSKIN_SACK, 0, TOOL_CLASS, 1, 0 },
+    { 0, 0, 0, 0, 0 }
+};
+
+struct trobj draugrInfidel[] = {
+    { FAKE_AMULET_OF_YENDOR, 0, AMULET_CLASS, 1, 0 },
+    { DAGGER, 1, WEAPON_CLASS, 1, 0 },
+    { JACKET, 1, ARMOR_CLASS, 1, CURSED },
+    { CLOAK_OF_PROTECTION, 0, ARMOR_CLASS, 1, CURSED },
+    { POT_WATER, 0, POTION_CLASS, 3, CURSED },
+    { SCR_CHARGING, 0, SCROLL_CLASS, 1, 0 },
     { FIRE_HORN, UNDEF_SPE, TOOL_CLASS, 1, 0 },
     { OILSKIN_SACK, 0, TOOL_CLASS, 1, 0 },
     { 0, 0, 0, 0, 0 }
@@ -941,6 +954,8 @@ register struct monst *mtmp;
             mkmonmoney(mtmp, (long) rn1(251, 250));
             if (racial_giant(mtmp))
                 ini_mon_inv(mtmp, giantInfidel, 1);
+			else if (racial_zombie(mtmp))
+                ini_mon_inv(mtmp, draugrInfidel, 1);
             else
                 ini_mon_inv(mtmp, subInfidel, 1);
             mongets(mtmp, SKELETON_KEY);
@@ -962,6 +977,8 @@ register struct monst *mtmp;
                 ini_mon_inv(mtmp, giantMonk, 1);
             else if (racial_tortle(mtmp))
                 ini_mon_inv(mtmp, tortleMonk, 1);
+			else if (racial_zombie(mtmp))
+                ini_mon_inv(mtmp, Draugr_Monk, 1);
             else
                 ini_mon_inv(mtmp, Monk, 1);
             ini_mon_inv(mtmp, Lamp, 10);
@@ -1105,6 +1122,7 @@ register struct monst *mtmp;
      *          soldiers get all sorts of things
      *          kops get clubs & cream pies.
      */
+
     switch (ptr->mlet) {
     case S_GIANT:
         if (rn2(2))
@@ -4180,6 +4198,7 @@ int otyp;
     int tryct;
     int spe;
 
+
     if (!otyp)
         return 0;
     otmp = mksobj(otyp, TRUE, FALSE);
@@ -4286,11 +4305,9 @@ int otyp;
             otmp->owt = weight(otmp);
         }
         spe = otmp->spe;
-        if (mpickobj(mtmp, otmp)) {
+		if (mpickobj(mtmp, otmp)) {
             /* otmp was freed via merging with something else */
             otmp = (struct obj *) 0;
-		} else {
-			obfree(otmp, (struct obj *) 0);
         }
         return spe;
     } else
@@ -4355,17 +4372,24 @@ register struct monst *mtmp;
 
     if (always_peaceful(ptr))
         return TRUE;
-    /* Major demons will sometimes be peaceful to unaligned Infidels.
-     * They must pass this 50% check, then the 50% check for chaotics
-     * being non-hostile to unaligned, then the usual check for coaligned.
-     * For crowned Infidels, the last two checks are bypassed. */
+/* Major demons will sometimes be peaceful to unaligned Infidels.
+       They must pass this 50% check, then the 50% check for chaotics
+       being non-hostile to unaligned, then the usual check for coaligned.
+       For crowned Infidels, the random check is bypassed. Followers of
+       Lolth - if they are Drow, stay chaotic, and are at least fervently
+       aligned, she will spawn peaceful. Undead (non-uniques) will be
+       peaceful towards Draugr more often than not */
     if (always_hostile(ptr)) {
-        if (ual == A_NONE && is_demon(ptr) && rn2(2))
+        if (Role_if(PM_INFIDEL) && is_demon(ptr)
+            && (u.uevent.uhand_of_elbereth || rn2(2))) {
             return TRUE;
-        else if (ual == A_NONE && u.uevent.uhand_of_elbereth == 4 && is_demon(ptr))
+        } else if (!Upolyd && Race_if(PM_DRAUGR)
+                   && is_undead(ptr)
+                   && !unique_corpstat(ptr) && rn2(3)) {
             return TRUE;
-        else
+        } else {
             return FALSE;
+        }
     }
 
     if (ptr->msound == MS_LEADER || ptr->msound == MS_GUARDIAN)
@@ -4459,8 +4483,8 @@ struct monst *mtmp;
     } else if (always_peaceful(mdat)) {
         int absmal = abs(mal);
         if (mtmp->mpeaceful) {
-            if (u.ualign.type == A_NONE) {
-                mtmp->malign += 1; /* Moloch's will */
+            if (u.ualign.type == A_NONE || (!Upolyd && Race_if(PM_DRAUGR))) {
+                mtmp->malign += 1; /* Moloch's will or be a Draugr */
             } else if (Role_if(PM_CONVICT)) {
                 /* Several 'always peaceful' types become hostile
                    once they see a Convict. Still an alignment

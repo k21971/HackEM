@@ -2375,7 +2375,7 @@ struct obj *sobj; /* sobj - scroll or fake spellbook for spell */
                     break;
                 }
                 pline("%s with a fluorescent blue light!", Yobjnam2(otmp, "glow"));
-                handle_new_property(otmp);
+                handle_new_property(otmp, FALSE);
                 /* Reveal the property */
                 otmp->oprops_known = otmp->oprops;
             } else {
@@ -4303,8 +4303,9 @@ struct obj *otmp, *sobj;
 }
 
 void
-handle_new_property(otmp)
+handle_new_property(otmp, allowbad)
 struct obj *otmp;
+boolean allowbad;
 {
     long old_wornmask = otmp->owornmask;
     long old_oprops = otmp->oprops;
@@ -4316,7 +4317,7 @@ struct obj *otmp;
 
     /* Do our best to add a property. */
     for (int i = 0; i < 1000; i++) {
-        create_oprop(otmp, TRUE);
+        create_oprop(otmp, allowbad);
         if (otmp->oprops && otmp->oprops != old_oprops)
             break;
     }

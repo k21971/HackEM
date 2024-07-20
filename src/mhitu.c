@@ -1024,7 +1024,7 @@ register struct monst *mtmp;
                     /* if our hero is sized tiny/small and unencumbered,
                        they have a decent chance of evading a zombie's
                        bite attack */
-                    if (is_zombie(mdat) && mattk->aatyp == AT_BITE
+                    if ((racial_zombie(mtmp) || is_zombie(mdat)) && mattk->aatyp == AT_BITE
                         && (youmonst.data)->msize <= MZ_SMALL
                         && is_animal(youmonst.data)
                         && (near_capacity() == UNENCUMBERED)
@@ -1324,7 +1324,7 @@ struct attack *mattk;
         pline("%s %s your %s %s!", Monnam(mtmp),
               (mattk->adtyp == AD_WRAP && !is_sal) 
                   ? "slips off of"
-                  : (mattk->adtyp == AD_DRIN && is_zombie(mtmp->data))
+                  : (mattk->adtyp == AD_DRIN && (racial_zombie(mtmp) || is_zombie(mtmp->data)))
                         ? "bites you, but slips off of"
                         : "grabs you, but cannot hold onto",
               obj->greased ? "greased" : "slippery",
@@ -1686,7 +1686,7 @@ register struct attack *mattk;
         break;
     case AD_DISE:
         hitmsg(mtmp, mattk);
-        if (shield_blockable(mtmp, mattk) || !diseasemu(mdat) || Invulnerable)
+        if (shield_blockable(mtmp, mattk) || (!diseasemu(mdat) && mtmp->mnum != PM_JUIBLEX) || Invulnerable)
             dmg = 0;
         break;
     case AD_FIRE:
@@ -1826,19 +1826,29 @@ register struct attack *mattk;
             Your("%s %s the %s to your head.",
                  helm_simple_name(uarmh), 
                  rn2(2) ? "blocks" : "repels", 
-                 is_zombie(mdat) ? "bite" : "attack");
+                 (racial_zombie(mtmp) || is_zombie(mdat)) ? "bite" : "attack");
             break;
         }
 
-        if (maybe_polyd(is_illithid(youmonst.data), Race_if(PM_ILLITHID))
-            && !is_zombie(mdat)) {
+		if (uarmh && !is_hard(uarmh) && rn2(2)) {
+            Your("%s repels the %s to your head.",
+                 helm_simple_name(uarmh),
+                 racial_zombie(mtmp) ? "bite" : "attack");
+            break;
+        }
+
+        if (maybe_polyd(is_illithid(youmonst.data), Race_if(PM_ILLITHID)) && (!racial_zombie(mtmp) || !is_zombie(mdat))) {
             Your("psionic abilities shield your brain.");
             break;
         }
 
-        if (is_zombie(mdat) && rn2(5)) {
+		if ((racial_zombie(mtmp) || is_zombie(mdat)) && rn2(6)) {
             if (uncancelled) {
-                pline("%s eats your brains!", Monnam(mtmp));
+                if (!Upolyd && Race_if(PM_DRAUGR))
+                    pline("%s tries to eat your brains, but can't.",
+                          Monnam(mtmp));
+                else
+                    pline("%s eats your brains!", Monnam(mtmp));
                 diseasemu(mdat);
             }
             break;
@@ -1868,10 +1878,12 @@ register struct attack *mattk;
             break;
         } else {
             (void) adjattrib(A_INT, -rnd(2), FALSE);
-            forget_traps();
-            if (rn2(2))
-                forget(rnd(u.uluck <= 0 ? 4 : 2));
-            break;
+			if (!racial_zombie(mtmp)) {
+				forget_traps();
+				if (rn2(2))
+				    forget(rnd(u.uluck <= 0 ? 4 : 2));
+			}
+			break;
         }
     case AD_PLYS:
         hitmsg(mtmp, mattk);
@@ -2456,10 +2468,13 @@ do_rust:
         hitmsg(mtmp, mattk);
         if (!mtmp->mcan && !rn2(3))
             if (how_resistant(ACID_RES) > 50 || Underwater) {
-                pline("You're covered in %s, but it seems harmless.",
-                      hliquid("acid"));
-                monstseesu(M_SEEN_ACID);
-                dmg = 0;
+				if (mtmp->mnum == PM_JUIBLEX) {
+					pline("You're covered in %s and Juiblex's %s burns like the fires of hell!", hliquid("acid"), hliquid("acid"));
+				} else {
+					dmg = 0;
+					pline("You're covered in %s, but it seems harmless.", hliquid("acid"));
+					monstseesu(M_SEEN_ACID);
+				}
             } else {
                 pline("You're covered in %s!  It burns!", hliquid("acid"));
                 exercise(A_STR, FALSE);
@@ -2637,7 +2652,7 @@ do_rust:
                 killer.format = NO_KILLER_PREFIX;
                 Sprintf(killer.name, "decapitated by %s",
                         an(l_monnam(mtmp)));
-                done(DIED);
+                done(DECAPITATED);
             }
             dmg = 0;
         }
@@ -2651,7 +2666,7 @@ do_rust:
     case AD_WTHR: {
         uchar withertime = max(2, dmg);
         boolean no_effect =
-            (nonliving(youmonst.data) || (!Upolyd && Race_if(PM_VAMPIRIC)) 
+            (nonliving(youmonst.data) || (!Upolyd && Race_if(PM_VAMPIRIC)) || racial_zombie(&youmonst)
               || !uncancelled || BWithering);
         
         boolean lose_maxhp = (withertime >= 8); /* if already withering */
@@ -3169,7 +3184,7 @@ struct attack *mattk;
             tmp = 0;
         break;
     case AD_DISE:
-        if (!diseasemu(mtmp->data))
+        if (!diseasemu(mtmp->data) && mtmp->mnum != PM_JUIBLEX)
             tmp = 0;
         break;
     case AD_DREN:
@@ -3223,7 +3238,7 @@ struct attack *mattk;
             killer.format = NO_KILLER_PREFIX;
             Sprintf(killer.name, "disintegrated by %s",
                     an(mtmp->data->mname));
-            done(DIED);
+            done(DISINTEGRATED);
         } else {
             tmp = 0;
         }

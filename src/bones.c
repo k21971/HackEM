@@ -596,6 +596,11 @@ struct obj *corpse;
         if (!otmp)
             return; /* couldn't make statue */
         mtmp = (struct monst *) 0;
+	} else if (Race_if(PM_DRAUGR)) {
+        /* don't let draugr arise as some other monster */
+        drop_upon_death((struct monst *) 0, (struct obj *) 0, u.ux, u.uy);
+        mtmp = (struct monst *) 0;
+        u.ugrave_arise = NON_PM;
     } else if (Race_if(PM_VAMPIRIC)) {
         /* don't let vampires rise as some other monsters */
         drop_upon_death((struct monst *) 0, (struct obj *) 0, u.ux, u.uy);

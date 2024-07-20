@@ -433,7 +433,7 @@ boolean foundyou;
         if (how_resistant(FIRE_RES) == 100) {
             shieldeff(u.ux, u.uy);
             if (is_demon(magr->data)) {
-                if (Race_if(PM_DEMON) || nonliving(youmonst.data)) {
+                if (Race_if(PM_DEMON) || Race_if(PM_DRAUGR) || nonliving(youmonst.data)) {
                     dmg = 0;
                 } else {
                     pline_The("hellish flames sear your soul!");
@@ -445,8 +445,7 @@ boolean foundyou;
                 dmg = 0;
             }
         } else {
-            if (is_demon(magr->data)
-                && !(Race_if(PM_DEMON) || nonliving(youmonst.data))) {
+            if (is_demon(magr->data) && !(Race_if(PM_DEMON) || Race_if(PM_DRAUGR) || nonliving(youmonst.data))) {
                 pline_The("hellish flames sear your soul!");
                 dmg = resist_reduce(dmg, FIRE_RES) * 2;
             } else {

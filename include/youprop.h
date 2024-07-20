@@ -493,8 +493,10 @@
 #define Free_action u.uprops[FREE_ACTION].extrinsic /* [Tom] */
 
 #define Fixed_abil u.uprops[FIXED_ABIL].extrinsic /* KMH */
+#define HLifesaved u.uprops[LIFESAVED].intrinsic /* Draugr race */
 
-#define Lifesaved u.uprops[LIFESAVED].extrinsic
+#define ELifesaved u.uprops[LIFESAVED].extrinsic
+#define Lifesaved (HLifesaved || ELifesaved)
 
 #define EStomping u.uprops[STOMPING].extrinsic
 #define Stomping (EStomping && !Levitation)

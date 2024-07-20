@@ -320,6 +320,8 @@ struct you {
     int ulevel;         /* 1 to MAXULEV */
 	int tempulevel; /* used when setting techniques on save */
     int ulevelmax;
+	int lastattack; /* last skill used for attak */
+	int specialty; /* combat specialty chosen */
     unsigned utrap;     /* trap timeout */
     unsigned utraptype; /* defined if utrap nonzero. one of utraptypes */
     char urooms[5];         /* rooms (roomno + 3) occupied now */

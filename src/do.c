@@ -2089,7 +2089,12 @@ boolean at_stairs, falling, portal;
 #endif
             if (!Deaf)
                 You_hear("groans and moans everywhere.");
-            You_feel("unable to rest or recuperate here.");
+			if (!Upolyd && Race_if(PM_DRAUGR)) {
+                ; /* Draugr that are not poly'd into another form
+                     can still regenerate hit points */
+            } else {
+				You_feel("unable to rest or recuperate here.");
+			}
         } else
             pline("It is hot here.  You smell smoke...");
     }
@@ -2598,7 +2603,11 @@ long timeout;
 
     if (!body->zombie_corpse && has_omonst(body) && has_erac(OMONST(body)))
          mptr = r_data(OMONST(body));
-    zmon = zombie_form(mptr);
+	if (has_omonst(body) && has_erac(OMONST(body))
+        && ERAC(OMONST(body))->rmnum == PM_DRAUGR) {
+        revive_mon(arg, timeout);
+	} else {
+		zmon = zombie_form(mptr);
 
     if (zmon != NON_PM && !(mvitals[zmon].mvflags & G_GENOD)) {
         if (has_omid(body))
@@ -2611,6 +2620,7 @@ long timeout;
     } else {
         rot_corpse(arg, timeout);
     }
+	}
 }
 
 int

@@ -1807,7 +1807,7 @@ int dieroll; /* needed for Magicbane and vorpal blades */
     char hittee[BUFSZ];
     struct artifact* atmp;
     struct obj *target;
-    int j, k, mdx, mdy, permdmg = 0;
+    int j, k, l, mdx, mdy, permdmg = 0;
     int time = 1; /* For Mouser's Scalpel */
     int hurtle_distance = 0; /* For Ogresmasher */
 
@@ -2530,8 +2530,9 @@ int dieroll; /* needed for Magicbane and vorpal blades */
     atmp = &artilist[(unsigned char) otmp->oartifact];
 
     if (atmp->spfx & (SPFX_DFLAGH | SPFX_DCLAS)) {
-	j = !rn2(10); /* 10% chance of instakill for some artifacts */
+		j = !rn2(10); /* 10% chance of instakill for some artifacts */
         k = !rn2(20); /* 5% chance if same weapon is used against the player */
+		l = !rn2(5);  /* special chance of incineration (Draugr) */
         switch (otmp->oartifact) {
             case ART_WEREBANE:
                 if (youattack && is_were(mdef->data) && j) {
@@ -2704,6 +2705,17 @@ int dieroll; /* needed for Magicbane and vorpal blades */
                                   artiname(otmp->oartifact), mon_nam(mdef));
                         mongone(mdef);
                     }
+				} else if (youdefend && l && maybe_polyd(is_undead(youmonst.data), Race_if(PM_DRAUGR))) {
+                pline("The holy power of Sunsword incinerates your undead flesh!");
+                if (Upolyd) {
+                    /* player returns to their original form */
+                    *dmgptr = ((2 * u.mh) + FATAL_DAMAGE_MODIFIER);
+                } else {
+                    killer.format = NO_KILLER_PREFIX;
+                    /* specifically name Sunsword */
+                    Sprintf(killer.name, "incinerated by Sunsword");
+                    done(INCINERATED);
+                }
                 } else if (youdefend && is_undead(youmonst.data) && k) {
                     pline_The("holy power of %s incinerates your undead flesh!",
                               artiname(otmp->oartifact));
@@ -2864,8 +2876,7 @@ int dieroll; /* needed for Magicbane and vorpal blades */
                       mon_nam(mdef));
                 if (Hallucination && !flags.female)
                     pline("Good job Henry, but that wasn't Anne.");
-		        if (is_zombie(mdef->data)
-                      || (is_troll(mdef->data) && !mlifesaver(mdef))) {
+		        if (racial_zombie(mdef) || is_zombie(mdef->data) || (is_troll(mdef->data) && !mlifesaver(mdef))) {
                     mdef->mcan = 1; /* kinda hard to revive if you've lost your head... */
                         otmp->dknown = TRUE;
                 }

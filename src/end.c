@@ -23,6 +23,8 @@
 #define FIRST_AMULET AMULET_OF_ESP
 #define LAST_AMULET AMULET_OF_YENDOR
 
+#define DRAUGR_REVIVE rnd(3)
+
 extern const int matprices[];
 
 struct valuable_data {
@@ -312,7 +314,7 @@ static NEARDATA const char *deaths[] = {
     /* the array of death */
     "died", "betrayed", "choked", "poisoned", "starvation", "drowning", "burning",
     "dissolving under the heat and pressure", "crushed", "turned to stone",
-    "turned into slime", "genocided", "panic", "trickery", "quit",
+    "turned into slime", "decapitated", "incinerated", "disintegrated", "genocided", "panic", "trickery", "quit",
     "escaped", "ascended"
 };
 
@@ -322,7 +324,7 @@ static NEARDATA const char *ends[] = {
     "starved", "drowned", "burned",
     "dissolved in the lava",
     "were crushed", "turned to stone",
-    "turned into slime", "were genocided",
+    "turned into slime", "decapitated", "incinerated", "disintegrated", "were genocided",
     "panicked", "were tricked", "quit",
     "escaped", "ascended"
 };
@@ -1375,7 +1377,51 @@ int how;
             context.botl = 1;
         }
     }
-    if (Lifesaved && (how <= GENOCIDED)) {
+	 if (HLifesaved && !ELifesaved && (how <= GENOCIDED)) { /* Draugr */
+        pline("But wait...  Suddenly, you start to revive!");
+        /* reviving takes a toll */
+        (void) adjattrib(A_STR, -1, TRUE);
+        (void) adjattrib(A_CON, -1, TRUE);
+        savelife(how);
+        if (how == GENOCIDED) {
+            u.uhp = 0;
+            context.botl = 1;
+            pline("Unfortunately you are still genocided...");
+        } else if (how == DECAPITATED) { /* can't revive if you've lost your head */
+            u.uhp = 0;
+            context.botl = 1;
+            pline("Unfortunately you've lost your %s...",
+                  body_part(HEAD));
+        } else if ((how == INCINERATED)
+                   || (how == DISINTEGRATED)) { /* nothing to revive */
+            u.uhp = 0;
+            context.botl = 1;
+            pline("Unfortunately there's nothing left to revive...");
+        } else if (how == STONING) { /* stoning */
+            u.uhp = 0;
+            context.botl = 1;
+            pline("Unfortunately you've turned to stone...");
+        } else if (u.umortality > DRAUGR_REVIVE) { /* ran out of revival chances */
+            u.uhp = 0;
+            context.botl = 1;
+            pline("Unfortunately you weren't strong enough to revive fully...");
+        } else if (is_open_air(x, y) && !Levitation
+                   && !(Flying && !(Punished && !carried(uball)
+                        && is_open_air(uball->ox, uball->oy)))) {
+            if (safe_teleds(TELEDS_ALLOW_DRAG | TELEDS_TELEPORT))
+                return; /* successful life-save */
+            /* nowhere safe to land; repeat falling loop... */
+            u.uhp = 0;
+            context.botl = 1;
+            pline("Unfortunately the impact was too great...");
+        } else {
+            char killbuf[BUFSZ];
+            formatkiller(killbuf, BUFSZ, how, FALSE);
+            livelog_printf(LL_LIFESAVE, "averted death (%s)", killbuf);
+            survive = TRUE;
+        }
+    }
+    if (ELifesaved && (how <= GENOCIDED)) {
         pline("But wait...");
         makeknown(AMULET_OF_LIFE_SAVING);
         Your("medallion %s!", !Blind ? "begins to glow" : "feels warm");

@@ -466,13 +466,20 @@ int roomno;
             epri_p->enter_time = 0L;
         }
         msg1 = msg2 = 0;
-        if (((sanctum && Is_sanctum(&u.uz)) || u.ualign.type == A_NONE)
-            && !p_coaligned(priest)) {
-            /* either a non-Infidel in the Sanctum, or an Infidel in any
-             * non-Moloch temple; either way, the priest is not happy */
+        if ((((sanctum && Is_sanctum(&u.uz)) || u.ualign.type == A_NONE)
+            && !p_coaligned(priest))
+			|| (!Upolyd && Race_if(PM_DRAUGR) && mon_aligntyp(priest) >= A_NEUTRAL)
+			) {
+			/* either a non-Infidel in the Sanctum, or an Infidel in any
+               non-Moloch temple, or a Draugr in a lawful or neutral temple;
+               either way, the priest is not happy */
             if (priest->mpeaceful) {
                 /* first time inside */
-                if (u.ualign.type == A_NONE) {
+				if (!Upolyd && Race_if(PM_DRAUGR) && !Role_if(PM_INFIDEL) && (mon_aligntyp(priest) >= A_NEUTRAL)) {
+                    msg1 = "Begone, foul abomination!";
+                    msg2 = "You desecrate this holy Sanctum!";
+                    call_guards = in_town(priest->mx, priest->my);
+                } else if (u.ualign.type == A_NONE) {
                     msg1 = "Begone, infidel!";
                     msg2 = "This place is barred for your cult!";
                     call_guards = in_town(priest->mx, priest->my);
@@ -498,7 +505,7 @@ int roomno;
                 verbalize1(msg2);
             epri_p->enter_time = moves + (long) d(10, 100); /* ~505 */
         }
-        /* for Infidels, visiting the Minetown temple is a very bad idea */
+        /* for Infidels or possibly Draugr, visiting the Minetown temple is a very bad idea */
         if (call_guards) {
             pline("%s calls for guards!", Monnam(priest));
             (void) angry_guards(FALSE);
@@ -629,7 +636,8 @@ register struct monst *priest;
     /* priests don't chat unless peaceful and in their own temple */
     if (!inhistemple(priest) || !priest->mpeaceful
         || !priest->mcanmove || priest->msleeping
-        || (u.ualign.type == A_NONE && !coaligned)) {
+        || (u.ualign.type == A_NONE && !coaligned)
+		|| (!Upolyd && Race_if(PM_DRAUGR) && mon_aligntyp(priest) >= A_NEUTRAL)) {
         static const char *cranky_msg[3] = {
             "Thou wouldst have words, eh?  I'll give thee a word or two!",
             "Talk?  Here is what I have to say!",

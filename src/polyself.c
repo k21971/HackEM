@@ -124,7 +124,7 @@ set_uasmon()
      * make a large set of monsters immune like
      * fungus, blobs, and jellies.
      * TODO: make is_vampshifter actually work for youmonst, and include that. */
-    if (nonliving(mdat))
+    if (nonliving(mdat) || racial_zombie(&youmonst))
         BWithering |= FROMFORM;
     else
         BWithering &= ~FROMFORM;
@@ -2202,7 +2202,7 @@ int part;
              && (has_claws(mptr) || has_claws_undead(mptr))
              && !index(not_claws, mptr->mlet) && mptr != &mons[PM_STONE_GOLEM]
              && mptr != &mons[PM_INCUBUS] && mptr != &mons[PM_SUCCUBUS])
-            || Race_if(PM_DEMON) || Race_if(PM_ILLITHID) || Race_if(PM_TORTLE)))
+            || Race_if(PM_DEMON) || Race_if(PM_ILLITHID) || Race_if(PM_TORTLE) || Race_if(PM_DRAUGR)))
         return (part == HAND) ? "claw" : "clawed";
     if ((mptr == &mons[PM_MUMAK] || mptr == &mons[PM_MASTODON]
          || mptr == &mons[PM_WOOLLY_MAMMOTH])

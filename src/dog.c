@@ -977,10 +977,10 @@ register struct obj *obj;
         /* even carnivores will eat carrots if they're temporarily blind */
         mblind = (!mon->mcansee && haseyes(mon->data));
 
-        /* ghouls prefer old corpses and unhatchable eggs, yum!
+        /* ghouls/draugr prefer old corpses and unhatchable eggs, yum!
            they'll eat fresh non-veggy corpses and hatchable eggs
            when starving; they never eat stone-to-flesh'd meat */
-        if (is_ghoul(mptr)) {
+        if (is_ghoul(mptr) || racial_zombie(mon)) {
             if (obj->otyp == CORPSE)
                 return (peek_at_iced_corpse_age(obj) + 50L <= monstermoves
                         && fptr != &mons[PM_LIZARD]
@@ -1239,8 +1239,8 @@ struct obj *obj;
         return FALSE;
     }
     
-    if (Role_if(PM_CONVICT) && (is_domestic(mtmp->data) && obj)) {
-        /* Domestic animals are wary of the Convict */
+    if ((Role_if(PM_CONVICT)  || (!Upolyd && Race_if(PM_DRAUGR))) && (is_domestic(mtmp->data) && obj)) {
+        /* Domestic animals are wary of the Convict and Draugr */
         pline("%s still looks wary of you.", Monnam(mtmp));
         return FALSE;
     }

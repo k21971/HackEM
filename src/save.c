@@ -236,6 +236,7 @@ dosave0()
     store_plname_in_file(fd);
     ustuck_id = (u.ustuck ? u.ustuck->m_id : 0);
     usteed_id = (u.usteed ? u.usteed->m_id : 0);
+	u.fearedmon = (struct monst *) 0; /* for now remove their specific object of their fear, but keep the afraid status */
     /* savelev() might save uball and uchain, releasing their memory if
        FREEING, so we need to check their status now; if hero is swallowed,
        uball and uchain will persist beyond saving map floor and inventory

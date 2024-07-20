@@ -945,9 +945,17 @@ gcrownu()
             verbalize("Thou shalt be my vassal of suffering and terror!");
             livelog_printf(LL_DIVINEGIFT,
                            "became the Emissary of Moloch");
-            class_gift = SPE_FIREBALL; /* no special weapon */
             unrestrict_weapon_skill(P_TRIDENT);
             P_MAX_SKILL(P_TRIDENT) = P_EXPERT;
+			if (Race_if(PM_DRAUGR)) {
+                in_hand = wielding_artifact(ART_ANGELSLAYER);
+                already_exists =
+                    exist_artifact(TRIDENT, artiname(ART_ANGELSLAYER));
+                incr_resistance(&HShock_resistance, 100);
+                HSee_invisible |= FROMOUTSIDE;
+                monstseesu(M_SEEN_ELEC);
+            } else {
+            class_gift = SPE_FIREBALL; /* no special weapon */
             if (Upolyd)
                 rehumanize(); /* return to original form -- not a demon yet */
 
@@ -973,6 +981,7 @@ gcrownu()
             newsym(u.ux, u.uy);
             retouch_equipment(2); /* silver */
             monstseesu(M_SEEN_FIRE | M_SEEN_POISON | M_SEEN_SLEEP);
+			}
             break;
         }
     }
@@ -1094,6 +1103,25 @@ gcrownu()
             break;
         }
         case A_NONE:
+			if (Race_if(PM_DRAUGR)) {
+            if (class_gift != STRANGE_OBJECT) {
+                ; /* already got bonus above */
+            } else if (obj && in_hand) {
+                if (!Blind)
+                    Your("%s briefly flares with an eldritch glow.",
+                         xname(obj));
+                obj->dknown = TRUE;
+            } else if (!already_exists) {
+                obj = mksobj(TRIDENT, FALSE, FALSE);
+                obj = oname(obj, artiname(ART_ANGELSLAYER));
+                obj->spe = 1;
+                at_your_feet("A trident");
+                dropy(obj);
+                u.ugifts++;
+            }
+            if (obj && obj->oartifact == ART_ANGELSLAYER)
+                discover_artifact(ART_ANGELSLAYER);
+        } else {
             /* OK, we don't get an artifact, but surely Moloch
              * can at least offer His own blessing? */
             obj = uwep;
@@ -1104,6 +1132,7 @@ gcrownu()
                 obj->oprops |= ITEM_FIRE;
                 obj->oprops_known |= ITEM_FIRE;
             }
+			}
             break;
         default:
             obj = 0; /* lint */
@@ -1420,7 +1449,7 @@ aligntyp g_align;
 
             godvoice(u.ualign.type,
                      "Thou hast pleased me with thy progress,");
-            if (!(HTelepat & INTRINSIC)) {
+            if (!(HTelepat & INTRINSIC) && !Race_if(PM_DRAUGR)) {
                 HTelepat |= FROMOUTSIDE;
                 pline(msg, "Telepathy");
                 if (Blind)
@@ -1454,8 +1483,8 @@ aligntyp g_align;
             struct obj *otmp;
             int trycnt = u.ulevel + 1;
 
-            /* cavepersons don't mess around with spells, so do nothing */
-            if (Role_if(PM_CAVEMAN)) {
+            /* cavepersons/draugr don't mess around with spells, so do nothing */
+            if (Role_if(PM_CAVEMAN) || Race_if(PM_DRAUGR)) {
                 break;
             } else {
                 /* not yet known spells given preference over already known ones.
@@ -1856,15 +1885,15 @@ dosacrifice()
             }
         }
 
-        if (your_race(ptr)) {
-            if (is_demon(raceptr(&youmonst))) {
+		if (your_race(ptr)
+            || (Race_if(PM_DRAUGR) && otmp->zombie_corpse)) {
+            if (is_demon(raceptr(&youmonst))) { 
                 You("find the idea very satisfying.");
                 exercise(A_WIS, TRUE);
             } else if (u.ualign.type > A_CHAOTIC) {
                 pline("You'll regret this infamous offense!");
                 exercise(A_WIS, FALSE);
             }
-
             if (highaltar
                 && (altaralign != A_CHAOTIC || u.ualign.type != A_CHAOTIC)
                 && (altaralign != A_NONE || u.ualign.type != A_NONE)) {

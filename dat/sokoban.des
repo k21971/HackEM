@@ -3410,68 +3410,67 @@ OBJECT: '/', random
 # The delicatessen:
 REGION: (08,01,12,04),lit,"food shop"
 
-
-# "Stacked Dozen"
-# Map created by karadoc
-MAZE: "soko2-17",' '
+# "Daedalus Delicatessen #2"
+MAZE:"soko2-17",' '
 FLAGS: noteleport, premapped, solidify
-MESSAGE: "Stacked Dozen"
+MESSAGE: "Daedalus Delicatessen"
 GEOMETRY: center, center
-#123456789012345678901234
+#12345678901234567890123456789012345
 MAP
----------         ------ 
-|.......|     ----|....--
-|.......|    --..--.....|
-|.......|  ---......-.|.|
-|.......|  |..........|.|
-|.......|  |.....-......|
-|+------------.....--...|
-|...............|.......|
--------------------------
+       -------              ------- 
+    ---|.....|---           |.....| 
+  ---..|.....|..---        --.....--
+ --....|.....+....--  -----|.......|
+ |.....|.....|.....|  |....|.......|
+------+---------+------....|.......|
+|........................--|.......|
+--.....|......---..----|.| |.......|
+ |.........--..--..|   |.| -------+|
+ --....|...--.....--   |.|       |.|
+  ---..|........---    |.---------.|
+    ---|....-----      |...........|
+       -------         -------------
 ENDMAP
-STAIR: (04,03), up
-STAIR: (17,07), down
-DOOR: locked,(01,06)
-REGION: (00,00,24,08), lit, "ordinary"
-NON_DIGGABLE: (00,00,24,08)
-NON_PASSWALL: (00,00,24,08)
+STAIR: (01,06), down
+STAIR: (31,04), up
+DOOR:closed,(13,03)
+DOOR:random,(06,05)
+DOOR: locked,(16,05)
+DOOR: locked,(34,08)
+REGION: (00,00,35,12), lit, "ordinary"
+NON_DIGGABLE: (00,00,35,12)
+NON_PASSWALL: (00,00,35,12)
 
-# Spoiler: positions to aim for are as follows:
-# (19,02),(21,02),(16,03),(17,03),(13,04),(17,04),(20,04),
-# (21,04),(16,05),(22,05),(21,06), and the last stands at (14,05).
-OBJECT: ('`', "boulder"), (14,05)
-OBJECT: ('`', "boulder"), (14,05)
-OBJECT: ('`', "boulder"), (14,05)
-OBJECT: ('`', "boulder"), (14,05)
-OBJECT: ('`', "boulder"), (14,05)
-OBJECT: ('`', "boulder"), (14,05)
-OBJECT: ('`', "boulder"), (14,05)
-OBJECT: ('`', "boulder"), (14,05)
-OBJECT: ('`', "boulder"), (14,05)
-OBJECT: ('`', "boulder"), (14,05)
-OBJECT: ('`', "boulder"), (14,05)
-OBJECT: ('`', "boulder"), (14,05)
-ENGRAVING:(17,07),burn,"How did they all end up on top of each other?"
+OBJECT: ('`', "boulder"), (05,06)
+OBJECT: ('`', "boulder"), (09,06)
+OBJECT: ('`', "boulder"), (13,06)
+OBJECT: ('`', "boulder"), (06,07)
+OBJECT: ('`', "boulder"), (10,07)
+OBJECT: ('`', "boulder"), (11,07)
+OBJECT: ('`', "boulder"), (07,08)
+OBJECT: ('`', "boulder"), (04,09)
+OBJECT: ('`', "boulder"), (08,09)
+OBJECT: ('`', "boulder"), (09,10)
+OBJECT: ('`', "boulder"), (13,10)
 
-TRAP: "hole", (02,07)
-TRAP: "hole", (03,07)
-TRAP: "hole", (04,07)
-TRAP: "hole", (05,07)
-TRAP: "hole", (06,07)
-TRAP: "hole", (07,07)
-TRAP: "hole", (08,07)
-TRAP: "hole", (09,07)
-TRAP: "hole", (10,07)
-TRAP: "hole", (11,07)
-TRAP: "hole", (12,07)
+TRAP: "hole", (19,06)
+TRAP: "hole", (20,06)
+TRAP: "hole", (21,06)
+TRAP: "hole", (22,06)
+TRAP: "hole", (23,06)
+TRAP: "hole", (24,06)
+TRAP: "hole", (24,07)
+TRAP: "hole", (24,08)
+TRAP: "hole", (24,09)
+TRAP: "hole", (24,10)
 
-OBJECT: '%', random
-OBJECT: '%', random
-OBJECT: '%', random
-OBJECT: '%', random
-OBJECT: '%', random
+# No free food here, but you can buy some from the deli.
 OBJECT: '=', random
 OBJECT: '/', random
+
+# The delicatessen:
+REGION: (08,01,12,04),lit,"food shop"
+
 
 
 ### Top (last) level of Sokoban ###

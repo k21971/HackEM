@@ -633,7 +633,7 @@ struct obj *otmp;
             }
             mtmp->msick = mtmp->mwither = 0;
             helpful_gesture = TRUE;
-        } else if (is_zombie(mtmp->data)) {
+        } else if (racial_zombie(mtmp) || is_zombie(mtmp->data)) {
             if (!DEADMONSTER(mtmp)) {
                 dmg = d(1, 8) * (dbl_dmg() ? 2 : 1);
                 damage_mon(mtmp, dmg, AD_PHYS, TRUE);
@@ -1348,7 +1348,7 @@ unturn_you()
 {
     (void) unturn_dead(&youmonst); /* hit carried corpses and eggs */
 
-    if (is_undead(youmonst.data) || (Race_if(PM_VAMPIRIC) && !Upolyd)) {
+    if (is_undead(youmonst.data) || ((Race_if(PM_VAMPIRIC) || Race_if(PM_DRAUGR)) && !Upolyd)) {
         if (!Stun_resistance)
             You_feel("frightened and %sstunned.", Stunned ? "even more " : "");
         make_stunned((HStun & TIMEOUT) + (long) rnd(30), FALSE);
@@ -2849,6 +2849,9 @@ boolean ordinary;
     boolean learn_it = FALSE;
     boolean wonder = FALSE;
     int damage = 0;
+	int sickness_skill = ((P_SKILL(P_HEALING_SPELL) >= P_EXPERT)
+                          ? 3 : (P_SKILL(P_HEALING_SPELL) == P_SKILLED) ? 2 : 1);
+
     if (obj->otyp == WAN_WONDER) {
         if (!obj->dknown)
             You("have found a wand of wonder!");
@@ -3237,19 +3240,25 @@ boolean ordinary;
         You_feel("%sbetter.", obj->otyp == SPE_EXTRA_HEALING ? "much " : "");
         break;
     case SPE_CURE_SICKNESS:
-        if (Sick)
-            You("are no longer ill.");
-        if (Slimed)
-            make_slimed(0L, "The slime disappears!");
-        if (Withering) {
-            set_itimeout(&HWithering, (long) 0);
-            if (!Withering)
-                You("are no longer withering away.");
-        }
-        if (LarvaCarrier) {
-            You_feel("as if something inside you has just died.");
-            make_carrier(0L, FALSE);
-        }
+		if (Race_if(PM_DRAUGR)) {
+            You("shudder in agony!");
+            damage = d(sickness_skill, 8);
+            exercise(A_CON, FALSE);
+        } else {
+	        if (Sick)
+	            You("are no longer ill.");
+	        if (Slimed)
+	            make_slimed(0L, "The slime disappears!");
+	        if (Withering) {
+	            set_itimeout(&HWithering, (long) 0);
+	            if (!Withering)
+	                You("are no longer withering away.");
+	        }
+	        if (LarvaCarrier) {
+	            You_feel("as if something inside you has just died.");
+	            make_carrier(0L, FALSE);
+	        }
+		}
         healup(0, 0, TRUE, FALSE);
         break;
     case SPE_RESTORE_ABILITY: {
@@ -4180,6 +4189,13 @@ int dmg; /* base amount to be adjusted by bonus or penalty */
         dmg += 2;
     else
         dmg += 3; /* Int 25 */
+
+	if (u.specialty && u.specialty == P_ATTACK_SPELL) {
+		int spectot = specialtybonus();
+		if (spectot > 0) {
+			dmg += spectot;
+		}
+	}
 
     return dmg;
 }

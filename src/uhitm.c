@@ -406,11 +406,16 @@ int *attk_count, *role_roll_penalty;
     /* if unskilled with a weapon/object type (bare-handed is exempt),
      * you'll never have a chance greater than 75% to land a hit.
      */
+	 u.lastattack = P_BARE_HANDED_COMBAT;
     if (uwep && aatyp == AT_WEAP && !u.uswallow) {
+		u.lastattack = weapon_type(uwep);
         wepskill = P_SKILL(weapon_type(uwep));
         twowepskill = P_SKILL(P_TWO_WEAPON_COMBAT);
         /* use the lesser skill of two-weapon or your primary */
         useskill = (u.twoweap && twowepskill < wepskill) ? twowepskill : wepskill;
+		if (u.specialty == P_TWO_WEAPON_COMBAT && u.twoweap) {
+			u.lastattack = P_TWO_WEAPON_COMBAT;
+		}
         if ((useskill == P_UNSKILLED || useskill == P_ISRESTRICTED) && tmp > 15) {
             tmp = 15;
             if (!rn2(5)) {
@@ -1020,8 +1025,7 @@ struct attack *uattk;
         int race = (flags.female && urace.femalenum != NON_PM)
                     ? urace.femalenum : urace.malenum;
         struct attack *attacks = mons[race].mattk;
-        if ((Race_if(PM_ILLITHID) && rn2(4))
-            || Race_if(PM_CENTAUR))
+        if (((Race_if(PM_ILLITHID)  || Race_if(PM_DRAUGR)) && rn2(4)) || Race_if(PM_CENTAUR))
             return 0;
         for (i = 0; i < NATTK; i++) {
             if (attacks[i].aatyp != AT_WEAP && attacks[i].aatyp != AT_NONE) {
@@ -2143,8 +2147,16 @@ int dieroll;
         if (!do_pickpocket(mon))
             return 0;
         hittxt = TRUE;
-    } else if (!already_killed)
+    } else if (!already_killed) {
+		if (u.specialty && u.lastattack == u.specialty) {
+			u.lastattack = 0;
+			int spectot = specialtybonus();
+			if (spectot > 0) {
+				tmp += spectot;
+			}
+		}
         damage_mon(mon, tmp, AD_PHYS, TRUE);
+	}
     /* adjustments might have made tmp become less than what
        a level draining artifact has already done to max HP */
     if (mon->mhp > mon->mhpmax)
@@ -2207,6 +2219,7 @@ int dieroll;
                              || has_claws_undead(youmonst.data)
                              || (Race_if(PM_DEMON) && !Upolyd)
                              || (Race_if(PM_TORTLE) && !Upolyd)
+							 || (Race_if(PM_DRAUGR) && !Upolyd)
                              || (Race_if(PM_ILLITHID) && !Upolyd))) {
             You("claw %s%s", mon_nam(mon),
                 canseemon(mon) ? exclam(tmp) : ".");
@@ -3098,7 +3111,7 @@ int specialdmg; /* blessed and/or silver bonus against various things */
             if (canseemon(mdef))
                 You("%s %s!",
                     rn2(2) ? "behead" : "decapitate", mon_nam(mdef));
-            if (is_zombie(mdef->data)
+            if (racial_zombie(mdef) || is_zombie(mdef->data)
                 || (is_troll(mdef->data) && !mlifesaver(mdef)))
                 mdef->mcan = 1; /* no head? no reviving */
             xkilled(mdef, 0);
@@ -3461,7 +3474,7 @@ do_rust:
         struct obj *helmet;
         struct obj *barding;
 
-        if (is_zombie(youmonst.data) && rn2(5)) {
+        if (((!Upolyd && Race_if(PM_DRAUGR)) || is_zombie(youmonst.data)) && rn2(5)) {
             if (!(resists_sick(mdef) || defended(mdef, AD_DISE))) {
                 if (mdef->msicktime)
                     mdef->msicktime -= rnd(3);
@@ -4391,9 +4404,9 @@ boolean weapon_attacks; /* skip weapon attacks if false */
             }
             /* [ALI] Vampires are also smart. They avoid biting
                monsters if doing so would be fatal */
-            if ((i > 0 && is_vampire(youmonst.data))
+            if ((i > 0 && (is_vampire(youmonst.data) || Race_if(PM_DRAUGR)))
                 /* ... unless they are impaired */
-                && (!Stunned && !Confusion && !Hallucination)
+                && (!Stunned && !Hallucination)
                 && ((how_resistant(DISINT_RES) < 50
                         && (mon->data == &mons[PM_BLACK_DRAGON]
                             || mon->data == &mons[PM_ANTIMATTER_VORTEX]))
@@ -4808,10 +4821,14 @@ boolean wep_was_destroyed;
                         hliquid("acid"));
             }
 
-            if (!(how_resistant(ACID_RES) > 50 || Underwater))
+            if (!(how_resistant(ACID_RES) > 50 || Underwater)) {
                 mdamageu(mon, tmp);
-            else
+			} else if (mon->mnum == PM_JUIBLEX) {
+				pline("Jubliex's acid burns like the first of hell!");
+                mdamageu(mon, tmp);
+            } else {
                 monstseesu(M_SEEN_ACID);
+			}
             if (!Underwater) {
                 if (!rn2(30))
                     erode_armor(&youmonst, ERODE_CORRODE);

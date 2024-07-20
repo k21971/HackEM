@@ -1025,6 +1025,7 @@ E int NDECL(dopickup);
 E void NDECL(lookaround);
 E boolean FDECL(crawl_destination, (int, int));
 E int NDECL(monster_nearby);
+E int NDECL(specialtybonus);
 E void FDECL(nomul, (int));
 E void FDECL(unmul, (const char *));
 E void FDECL(showdmg, (int, BOOLEAN_P));
@@ -2395,7 +2396,7 @@ E boolean FDECL(cant_revive, (int *, BOOLEAN_P, struct obj *));
 E boolean NDECL(create_particular);
 E int FDECL(mon_to_zombie, (int));
 E boolean maybe_process_scales(struct obj *, struct obj *);
-E void FDECL(handle_new_property, (struct obj *));
+E void FDECL(handle_new_property, (struct obj *, BOOLEAN_P));
 /* ### rect.c ### */
 
 E void NDECL(init_rect);

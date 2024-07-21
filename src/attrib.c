@@ -228,7 +228,7 @@ dra_abil[] = { { 1, &(HInfravision), "", "" },
                  { 1, &(HAcid_resistance), "", "" },
                  { 5, &(HVulnerable_fire), "sensitive to heat", "less sensitive to heat" },
                  { 5, &(HVulnerable_cold), "sensitive to cold", "less sensitive to cold" },
-                 { 25, &(HPolymorph_control), "your choices improve", "choiceless" },
+                 { 15, &(HPolymorph_control), "your choices improve", "choiceless" },
                  { 0, 0, 0, 0 } },
   
   hum_abil[] = { { 0, 0, 0, 0 } };

@@ -1377,7 +1377,7 @@ int how;
             context.botl = 1;
         }
     }
-	 if (HLifesaved && !ELifesaved && (how <= GENOCIDED)) { /* Draugr */
+	 if (HLifesaved && (how <= GENOCIDED)) { /* Draugr */
         pline("But wait...  Suddenly, you start to revive!");
         /* reviving takes a toll */
         (void) adjattrib(A_STR, -1, TRUE);
@@ -1421,7 +1421,7 @@ int how;
             survive = TRUE;
         }
     }
-    if (ELifesaved && (how <= GENOCIDED)) {
+    if (ELifesaved && (how <= GENOCIDED) && !Race_if(PM_DRAUGR)) {
         pline("But wait...");
         makeknown(AMULET_OF_LIFE_SAVING);
         Your("medallion %s!", !Blind ? "begins to glow" : "feels warm");

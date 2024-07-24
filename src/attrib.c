@@ -485,10 +485,6 @@ void
 change_luck(n)
 register schar n;
 {
-    if (u.uconduct.wishes >= 13) {
-        u.uluck = LUCKMIN;
-        return;
-    }
     u.uluck += n;
     if (u.uluck < 0 && u.uluck < LUCKMIN)
         u.uluck = LUCKMIN;

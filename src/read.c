@@ -3350,7 +3350,7 @@ boolean only_on_level; /**< if TRUE only genocide monsters on current level,
                 killplayer++;
                 break;
             }
-            if (is_human(ptr) && u.ualign.type != A_NONE) {
+            if (is_human(ptr) && u.ualign.type != A_NONE && how) { /* you don't feel guilty when you reverse genocide any more */
                 if (u.ualign.type == A_LAWFUL)
                     You_feel("guilty.");
                 adjalign(-sgn(u.ualign.type));

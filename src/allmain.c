@@ -199,8 +199,6 @@ boolean resuming;
     if (flags.quest_boon) {
         change_luck(1); /* silent */
     }
-    if (u.uconduct.wishes)
-        change_luck(wishluck());
 
     if (!resuming) { /* new game */
         context.rndencode = rnd(9000);

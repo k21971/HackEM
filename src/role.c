@@ -359,7 +359,7 @@ const struct Role roles[] = {
       S_IMP,
       S_JELLY,
       ART_MAGIC_MIRROR_OF_MERLIN,
-      MH_HUMAN | MH_CENTAUR | MH_DWARF | MH_ELF | MH_ORC | MH_ZOMBIE | MH_SHIFTER,
+      MH_HUMAN | MH_CENTAUR | MH_DWARF | MH_ELF | MH_ORC | MH_ZOMBIE | MH_SHIFTER | MH_VAMPIRE,
       ROLE_MALE | ROLE_FEMALE | ROLE_LAWFUL | ROLE_CHAOTIC,
       /* Str Int Wis Dex Con Cha */
       { 13, 7, 14, 8, 10, 17 },

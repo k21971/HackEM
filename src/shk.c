@@ -760,10 +760,12 @@ char *enterstring;
         }
     }
 
-    /* Visible striped prison shirt */
-    if (!Is_blackmarket(&u.uz) && (uarmu && (uarmu->otyp == STRIPED_SHIRT))
-        && !uarm && !uarmc) 
-        eshkp->pbanned = TRUE;
+    if (!Is_blackmarket(&u.uz)) {
+		/* Visible striped prison shirt */
+		/* Draugr being zombies */
+		if (((uarmu && (uarmu->otyp == STRIPED_SHIRT)) && !uarm && !uarmc) || (!Upolyd && Race_if(PM_DRAUGR)))
+			eshkp->pbanned = TRUE; 
+	}
 
     rt = rooms[*enterstring - ROOMOFFSET].rtype;
 
@@ -839,7 +841,10 @@ char *enterstring;
                       tool, plur(cnt));
             should_block = TRUE;
         } else if (eshkp->pbanned && !ANGRY(shkp)) {
-            verbalize("I don't sell to your kind here.");
+			if (!Upolyd && Race_if(PM_DRAUGR))
+                verbalize("I don't do business with zombies!");
+            else
+            	verbalize("I don't sell to your kind here.");
             should_block = TRUE;
         } else if (u.usteed) {
             if (!Deaf && !muteshk(shkp))
@@ -4371,7 +4376,7 @@ struct monst *shkp;
             Your("%s to dissemble into pieces!", aobjnam(obj, "seem"));
             
         } else {
-            handle_new_property(obj);
+            handle_new_property(obj, TRUE);
             /* Reveal the property */
             obj->oprops_known = obj->oprops;
         }

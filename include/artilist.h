@@ -113,6 +113,12 @@ STATIC_OVL NEARDATA struct artifact artilist[] = {
       PHYS(1, 1), NO_DFNS, NO_CARY, 0, 
       A_LAWFUL, NON_PM, NON_PM, 300L, NO_COLOR, DEFAULT_MAT),
 
+    A("Krelln", CRYSKNIFE,
+      (SPFX_NOWISH | SPFX_INTEL), 0, 0,
+      PHYS(0, 14), NO_DFNS, NO_CARY, 0,
+      /* We don't have Fremen; using elves as a close alternative. */
+      A_LAWFUL, NON_PM, PM_ELF, 500L, NO_COLOR, MINERAL),
+
     /* Original idea by Spicy. Prevents all monster regen. */
     A("Mortality Dial", EXECUTIONER_S_MACE, 
       (SPFX_RESTR | SPFX_REGEN), 0, 0, 
@@ -187,6 +193,12 @@ STATIC_OVL NEARDATA struct artifact artilist[] = {
 
 
         /*** Neutral artifacts ***/
+
+	A("Arvon", CRYSKNIFE,
+      (SPFX_NOWISH | SPFX_INTEL), 0, 0,
+      PHYS(0, 14), NO_DFNS, NO_CARY, 0,
+      /* We don't have Fremen; using elves as a close alternative. */
+      A_NEUTRAL, NON_PM, PM_ELF, 500L, NO_COLOR, MINERAL),
 
     /* This lance does a lot of damage, and also occasionally stuns */
     A("Bradamante\'s Fury", LANCE, 
@@ -314,7 +326,7 @@ STATIC_OVL NEARDATA struct artifact artilist[] = {
     A("Bat from Hell", BASEBALL_BAT,
       (SPFX_RESTR), 0, 0,
       PHYS(3, 20), NO_DFNS, NO_CARY, 0, 
-      A_CHAOTIC, NON_PM, NON_PM, 5000L, CLR_RED, DEFAULT_MAT),
+      A_CHAOTIC, PM_ROGUE, NON_PM, 5000L, CLR_RED, DEFAULT_MAT),
 
     /* Yeenoghu's infamous triple-headed flail. A massive weapon reputed to have been created
      * from the thighbone and torn flesh of an ancient god he slew. An extremely lethal artifact */

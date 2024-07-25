@@ -45,6 +45,7 @@ typedef struct dlb_library {
 #define DLBBASENAME "nhdat"
 extern char dlbfilename[MAX_DLB_FILENAME];
 extern char *FDECL(build_dlb_filename, (const char *));
+extern char *FDECL(thousands_int, (int));
 #endif
 #endif
 #ifndef FILENAME_CMP

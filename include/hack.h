@@ -158,12 +158,17 @@ enum game_end_types {
     CRUSHING     =  8,
     STONING      =  9,
     TURNED_SLIME =  10,
-    GENOCIDED    = 11,
-    PANICKED     = 12,
-    TRICKED      = 13,
-    QUIT         = 14,
-    ESCAPED      = 15,
-    ASCENDED     = 16
+
+	DECAPITATED  = 11,
+	INCINERATED  = 12,
+	DISINTEGRATED = 13,
+
+    GENOCIDED    = 14,
+    PANICKED     = 15,
+    TRICKED      = 16,
+    QUIT         = 17,
+    ESCAPED      = 18,
+    ASCENDED     = 19
 };
 
 typedef struct strbuf {
@@ -651,7 +656,7 @@ extern const struct PotionRecipe potionrecipes[]; /* table of fusions */
 # define debug_pline if (0) pline
 #endif
 
-#define DEVTEAM_EMAIL "eslunna@gmail.com"
-#define DEVTEAM_URL "https://github.com/elunna/hackem"
+#define DEVTEAM_EMAIL "nethack-cleaner@proton.me"
+#define DEVTEAM_URL "https://github.com/nethack-cleaner/HackEM"
 
 #endif /* HACK_H */

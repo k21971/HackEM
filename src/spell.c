@@ -371,7 +371,7 @@ learn(VOID_ARGS)
     /* JDS: lenses give 50% faster reading; 33% smaller read time */
     if (context.spbook.delay && ublindf && ublindf->otyp == LENSES && rn2(2))
         context.spbook.delay++;
-    if (Confusion) { /* became confused while learning */
+    if (Confusion || (Race_if(PM_DRAUGR) && book && book->otyp != SPE_BOOK_OF_THE_DEAD)) { /* became confused while learning */
         (void) confused_book(book);
         context.spbook.book = 0; /* no longer studying */
         context.spbook.o_id = 0;

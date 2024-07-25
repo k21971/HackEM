@@ -158,6 +158,18 @@ static const char *tortle_female_names[] = {
     0
 };
 
+static const char *draugr_male_names[] = {
+    "Bjorn",        "Erik",        "Gorm",       "Halfdan",    "Leif",
+    "Njal",         "Sten",        "Svend",      "Torsten",    "Ulf",
+    0
+};
+
+static const char *draugr_female_names[] = {
+    "Astrid",       "Frida",       "Gunhild",    "Helga",      "Sigrid",
+    "Revna",        "Thyra",       "Thurid",     "Yrsa",       "Ulfhild",
+    0
+};
+
 static const char *vampiric_male_names[] = {
     "Fortune",      "Ellena",       "Selene",   "Velorina",     "Rowena",
     "Opal",         "Sapphire",     "Echo",     "Quintella",    "Thelma",
@@ -165,6 +177,18 @@ static const char *vampiric_male_names[] = {
 };
 
 static const char *vampiric_female_names[] = {
+    "Zeidan",       "Lazarus",      "Sebastian", "Sliske",      "Angelus",
+    "Hunter",       "Damien",       "Deverell", "Mortas",       "Stelian",
+    "Valentine",    "Jairus",       "Armand",   0
+};
+
+static const char *dopp_male_names[] = { /* just a copy of the vampire ones for now */
+    "Fortune",      "Ellena",       "Selene",   "Velorina",     "Rowena",
+    "Opal",         "Sapphire",     "Echo",     "Quintella",    "Thelma",
+    "Ophelia",      "Petra",    "Bianca",       0
+};
+
+static const char *dopp_female_names[] = {
     "Zeidan",       "Lazarus",      "Sebastian", "Sliske",      "Angelus",
     "Hunter",       "Damien",       "Deverell", "Mortas",       "Stelian",
     "Valentine",    "Jairus",       "Armand",   0
@@ -187,7 +211,9 @@ static const struct mfnames namelists[] = {
     { centaur_male_names, centaur_female_names },
     { illithid_male_names, illithid_female_names },
     { tortle_male_names, tortle_female_names },
-    { vampiric_male_names, vampiric_female_names }
+    { vampiric_male_names, vampiric_female_names },
+    { dopp_male_names, dopp_female_names },
+	{ draugr_male_names, draugr_female_names }
 };
 
 void

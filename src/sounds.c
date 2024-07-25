@@ -1158,7 +1158,7 @@ register struct monst *mtmp;
         break;
     case MS_BRIBE:
         if (monsndx(ptr) == PM_PRISON_GUARD) {
-            long gdemand = 500 * u.ulevel;
+            long gdemand = 200 * u.ulevel;
             long goffer = 0;
 
     	    if (!mtmp->mpeaceful && !mtmp->mtame) {
@@ -1422,6 +1422,7 @@ dochat()
 
     /* Like convicts, Necromancers can pacify/tame zombies */
     if ((Role_if(PM_CONVICT) && is_rat(mtmp->data)) ||
+	(Race_if(PM_DRAUGR) && is_zombie(mtmp->data)) ||
         (Role_if(PM_NECROMANCER) && is_zombie(mtmp->data))) {
         if (!mtmp->mpeaceful && !mtmp->mtame) {
             if (Role_if(PM_CONVICT))

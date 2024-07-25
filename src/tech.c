@@ -21,6 +21,7 @@ STATIC_PTR int NDECL(draw_energy);
 static const struct innate_tech * NDECL(role_tech);
 static const struct innate_tech * NDECL(race_tech);
 static int NDECL(doblitz);
+static boolean NDECL(specialtychoice);
 static int NDECL(blitz_chi_strike);
 static int NDECL(blitz_e_fist);
 static int NDECL(blitz_pummel);
@@ -141,7 +142,8 @@ STATIC_OVL NEARDATA const char *tech_names[] = {
     "break rock",       /* 53 */
     "uppercut",         /* 54 */
     "ice armor",        /* 55 */
-    "",                 /* 56 */
+    "set specialty skill", /* 56 */
+    "",                 /* 57 */
     ""
 };
 
@@ -602,6 +604,86 @@ int *tech_no;
             prefix = "    ";
             any.a_int = 0;
         }
+		char prepare[40];
+		char notready[40];
+		char reloading[40];
+		char sooni[40];
+		if (techid(i) == T_SPECIALTY && u.specialty) {
+			char nme[40];
+			if (u.specialty == P_BARE_HANDED_COMBAT) {
+				Sprintf(nme, "Bare Handed");
+			} else if (u.specialty == P_DAGGER) {
+				Sprintf(nme, "Dagger");
+			} else if (u.specialty == P_KNIFE) {
+				Sprintf(nme, "Knife");
+			} else if (u.specialty == P_AXE) {
+				Sprintf(nme, "Axe");
+			} else if (u.specialty == P_PICK_AXE) {
+				Sprintf(nme, "Pick Axe");
+			} else if (u.specialty == P_SHORT_SWORD) {
+				Sprintf(nme, "Short Sword");
+			} else if (u.specialty == P_BROAD_SWORD) {
+				Sprintf(nme, "Broad Sword");
+			} else if (u.specialty == P_LONG_SWORD) {
+				Sprintf(nme, "Long Sword");
+			} else if (u.specialty == P_TWO_HANDED_SWORD) {
+				Sprintf(nme, "Two Handed Sword");
+			} else if (u.specialty == P_SABER) {
+				Sprintf(nme, "Saber");
+			} else if (u.specialty == P_CLUB) {
+				Sprintf(nme, "Club");
+			} else if (u.specialty == P_MACE) {
+				Sprintf(nme, "Mace");
+			} else if (u.specialty == P_MORNING_STAR) {
+				Sprintf(nme, "Morning Star");
+			} else if (u.specialty == P_FLAIL) {
+				Sprintf(nme, "Flail");
+			} else if (u.specialty == P_HAMMER) {
+				Sprintf(nme, "Hammer");
+			} else if (u.specialty == P_QUARTERSTAFF) {
+				Sprintf(nme, "Quarterstaff");
+			} else if (u.specialty == P_POLEARMS) {
+				Sprintf(nme, "Polearms");
+			} else if (u.specialty == P_SPEAR) {
+				Sprintf(nme, "Spear");
+			} else if (u.specialty == P_TRIDENT) {
+				Sprintf(nme, "Trident");
+			} else if (u.specialty == P_LIGHTSABER) {
+				Sprintf(nme, "Light Saber");
+			} else if (u.specialty == P_LANCE) {
+				Sprintf(nme, "Lance");
+			} else if (u.specialty == P_BOW) {
+				Sprintf(nme, "Bow");
+			} else if (u.specialty == P_SLING) {
+				Sprintf(nme, "Sling");
+			} else if (u.specialty == P_FIREARM) {
+				Sprintf(nme, "Firearm");
+			} else if (u.specialty == P_CROSSBOW) {
+				Sprintf(nme, "Crossbow");
+			} else if (u.specialty == P_DART) {
+				Sprintf(nme, "Dart");
+			} else if (u.specialty == P_SHURIKEN) {
+				Sprintf(nme, "Shuriken");
+			} else if (u.specialty == P_BOOMERANG) {
+				Sprintf(nme, "Boomerang");
+			} else if (u.specialty == P_WHIP) {
+				Sprintf(nme, "Whip");
+			} else if (u.specialty == P_UNICORN_HORN) {
+				Sprintf(nme, "Unicorn");
+			} else if (u.specialty == P_ATTACK_SPELL) {
+				Sprintf(nme, "Attack Spell");
+			}
+			int spectot = specialtybonus();
+			Sprintf(prepare, "Current: %s +%d", nme, spectot);
+			Sprintf(notready, "Not Ready (%s +%d)", nme, spectot);
+			Sprintf(reloading, "Reloading (%s +%d)", nme, spectot);
+			Sprintf(sooni, "Soon (%s +%d)", nme, spectot);
+		} else {
+			Sprintf(prepare, "Prepared");
+			Sprintf(notready, "Not Ready");
+			Sprintf(reloading, "Reloading");
+			Sprintf(sooni, "Soon");
+		}
 #ifdef WIZARD
         if (wizard) 
             if (!iflags.menu_tab_sep)			
@@ -612,10 +694,10 @@ int *tech_no;
                         tech_list[i].t_intrinsic & FROMOUTSIDE ? 'O' : ' ',
                         tech_inuse(techid(i)) ? "Active" :
                         tlevel <= 0 ? "Beyond recall" :
-                        !techtout(i) ? "Prepared" : 
+                        !techtout(i) ? prepare : 
                         techtout(i) > 10000 ? "Huge timeout" :
-                        techtout(i) > 1000 ? "Not Ready" :
-                        techtout(i) > 100 ? "Reloading" : "Soon",
+                        techtout(i) > 1000 ? notready :
+                        techtout(i) > 100 ? reloading : sooni,
                         techtout(i));
             else
                 Sprintf(buf, "%s%s\t%2d%c%c%c\t%s(%i)",
@@ -625,32 +707,32 @@ int *tech_no;
                         tech_list[i].t_intrinsic & FROMOUTSIDE ? 'O' : ' ',
                         tech_inuse(techid(i)) ? "Active" :
                         tlevel <= 0 ? "Beyond recall" :
-                        !techtout(i) ? "Prepared" : 
+                        !techtout(i) ? prepare : 
                         techtout(i) > 10000 ? "Huge timeout" :
-                        techtout(i) > 1000 ? "Not Ready" :
-                        techtout(i) > 100 ? "Reloading" : "Soon",
+                        techtout(i) > 1000 ? notready :
+                        techtout(i) > 100 ? reloading : sooni,
                         techtout(i));
         else
 #endif
         
-        if (!iflags.menu_tab_sep)			
+        if (!iflags.menu_tab_sep)
              Sprintf(buf, "%s%-*s %5d   %s",
                     prefix, longest, techname(i), tlevel,
                     tech_inuse(techid(i)) ? "Active" :
                     tlevel <= 0 ? "Beyond recall" :
-                    !techtout(i) ? "Prepared" : 
+                    !techtout(i) ? prepare : 
                     techtout(i) > 10000 ? "Huge timeout" :
-                    techtout(i) > 1000 ? "Not Ready" :
-                    techtout(i) > 100 ? "Reloading" : "Soon");
+                    techtout(i) > 1000 ? notready :
+                    techtout(i) > 100 ? reloading : sooni);
         else
              Sprintf(buf, "%s%s\t%5d\t%s",
                     prefix, techname(i), tlevel,
                     tech_inuse(techid(i)) ? "Active" :
                     tlevel <= 0 ? "Beyond recall" :
-                    !techtout(i) ? "Prepared" : 
+                    !techtout(i) ? prepare : 
                     techtout(i) > 10000 ? "Huge timeout" :
-                    techtout(i) > 1000 ? "Not Ready" :
-                    techtout(i) > 100 ? "Reloading" : "Soon");
+                    techtout(i) > 1000 ? notready :
+                    techtout(i) > 100 ? reloading : sooni);
 
         add_menu(tmpwin, NO_GLYPH, &any,
                  techtout(i) ? 0 : let, 0, ATR_NONE, buf, MENU_UNSELECTED);
@@ -1037,6 +1119,14 @@ int tech_no;
             res = tech_icearmor();
             if (res) {
                 t_timeout = rn1(500, 1000);
+            }
+            break;
+        case T_SPECIALTY:
+            res = specialtychoice();
+            if (res) {
+                t_timeout = rn1(1000, 1500);
+			} else {
+				t_timeout = 0;
             }
             break;
         case T_REINFORCE:
@@ -1634,6 +1724,10 @@ int oldlevel, newlevel;
     const struct innate_tech *tech = role_tech(), *rtech = race_tech();
     long mask = FROMEXPER;
 
+	if (!tech_known(T_SPECIALTY)) {
+		learntech(T_SPECIALTY, mask, 1);
+	}
+
     while (tech || rtech) {
         /* Have we finished with the tech lists? */
         if (!tech || !tech->tech_id) {
@@ -1990,6 +2084,82 @@ doblitz()
 
     /* done */
     return 1;
+}
+
+/* parse blitz input */
+static boolean
+specialtychoice()
+{
+	char buf[BUFSZ] = DUMMY;
+    char promptbuf[BUFSZ];
+	Strcpy(promptbuf, "Enter the skill name you to specialize in");
+    getlin(promptbuf, buf);
+	if (!strcmpi(buf, "bare handed combat") || !strcmpi(buf, "martial arts")) {
+		u.specialty = P_BARE_HANDED_COMBAT;
+	} else if (!strcmpi(buf, "dagger")) {
+		u.specialty = P_DAGGER;
+	} else if (!strcmpi(buf, "knife")) {
+		u.specialty = P_KNIFE;
+	} else if (!strcmpi(buf, "axe") || !strcmpi(buf, "battle axe")) {
+		u.specialty = P_AXE;
+	} else if (!strcmpi(buf, "pick axe")) {
+		u.specialty = P_PICK_AXE;
+	} else if (!strcmpi(buf, "short sword")) {
+		u.specialty = P_SHORT_SWORD;
+	} else if (!strcmpi(buf, "broad sword")) {
+		u.specialty = P_BROAD_SWORD;
+	} else if (!strcmpi(buf, "long sword")) {
+		u.specialty = P_LONG_SWORD;
+	} else if (!strcmpi(buf, "two handed sword") || !strcmpi(buf, "2-h sword")) {
+		u.specialty = P_TWO_HANDED_SWORD;
+	} else if (!strcmpi(buf, "saber")) {
+		u.specialty = P_SABER;
+	} else if (!strcmpi(buf, "club")) {
+		u.specialty = P_CLUB;
+	} else if (!strcmpi(buf, "mace")) {
+		u.specialty = P_MACE;
+	} else if (!strcmpi(buf, "morning star")) {
+		u.specialty = P_MORNING_STAR;
+	} else if (!strcmpi(buf, "flail")) {
+		u.specialty = P_FLAIL;
+	} else if (!strcmpi(buf, "hammer")) {
+		u.specialty = P_HAMMER;
+	} else if (!strcmpi(buf, "quarterstaff") || !strcmpi(buf, "quarter staff")) {
+		u.specialty = P_QUARTERSTAFF;
+	} else if (!strcmpi(buf, "polearms") || !strcmpi(buf, "polearm")) {
+    	u.specialty = P_POLEARMS;
+	} else if (!strcmpi(buf, "spear")) {
+    	u.specialty = P_SPEAR;
+	} else if (!strcmpi(buf, "trident")) {
+    	u.specialty = P_TRIDENT;
+	} else if (!strcmpi(buf, "light saber") || !strcmpi(buf, "lightsaber")) {
+    	u.specialty = P_LIGHTSABER;
+	} else if (!strcmpi(buf, "lance")) {
+    	u.specialty = P_LANCE;
+	} else if (!strcmpi(buf, "bow")) {
+    	u.specialty = P_BOW;
+	} else if (!strcmpi(buf, "sling")) {
+    	u.specialty = P_SLING;
+	} else if (!strcmpi(buf, "firearm") || !strcmpi(buf, "fire arm")) {
+    	u.specialty = P_FIREARM;
+	} else if (!strcmpi(buf, "crossbow")) {
+    	u.specialty = P_CROSSBOW;
+	} else if (!strcmpi(buf, "dart")) {
+    	u.specialty = P_DART;
+	} else if (!strcmpi(buf, "shuriken")) {
+    	u.specialty = P_SHURIKEN;
+	} else if (!strcmpi(buf, "boomerang")) {
+    	u.specialty = P_BOOMERANG;
+	} else if (!strcmpi(buf, "whip")) {
+    	u.specialty = P_WHIP;
+	} else if (!strcmpi(buf, "unicorn horn")) {
+    	u.specialty = P_UNICORN_HORN;
+	} else if (!strcmpi(buf, "attack spell")) {
+    	u.specialty = P_ATTACK_SPELL;
+	} else {
+		return FALSE;
+	}
+	return TRUE;
 }
 
 static void

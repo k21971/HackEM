@@ -202,6 +202,18 @@ static const struct innate {
                  { 5, &(HWarning), "sensitive", "" },
                  { 12, &(HRegeneration), "resilient", "less resilient" },
                  { 0, 0, 0, 0 } },
+
+dra_abil[] = { { 1, &(HInfravision), "", "" },
+                 { 1, &(HSick_resistance), "", "" },
+                 { 1, &(HCold_resistance), "", "" },
+                 { 1, &(HSleep_resistance), "", "" },
+                 { 1, &(HPoison_resistance), "", "" },
+                 { 1, &(HAggravate_monster), "", "" },
+				 { 1, &(HFearless), "", "" },
+                 { 1, &(HLifesaved), "", "" }, /* only a random number of times */
+				{ 1, &(HBreathless), "breathless", "full of air" },
+                 { 1, &(HVulnerable_fire), "", "" },
+                 { 0, 0, 0, 0 } },
   
   vam_abil[] =   { { 1, &(HPoison_resistance), "", "" },
                    { 1, &(HDrain_resistance), "", "" },
@@ -216,7 +228,7 @@ static const struct innate {
                  { 1, &(HAcid_resistance), "", "" },
                  { 5, &(HVulnerable_fire), "sensitive to heat", "less sensitive to heat" },
                  { 5, &(HVulnerable_cold), "sensitive to cold", "less sensitive to cold" },
-                 { 25, &(HPolymorph_control), "your choices improve", "choiceless" },
+                 { 15, &(HPolymorph_control), "your choices improve", "choiceless" },
                  { 0, 0, 0, 0 } },
   
   hum_abil[] = { { 0, 0, 0, 0 } };
@@ -320,7 +332,7 @@ boolean givemsg;
     int num = incr;
 
     if ((!num) || ((Race_if(PM_GIANT)
-                    || Race_if(PM_CENTAUR) || Race_if(PM_TORTLE))
+                    || Race_if(PM_CENTAUR) || Race_if(PM_TORTLE) || Race_if(PM_DRAUGR))
                    && (!(otmp && otmp->cursed)))) {
         if (ABASE(A_STR) < 18)
             num = (rn2(4) ? 1 : rnd(6));
@@ -473,10 +485,6 @@ void
 change_luck(n)
 register schar n;
 {
-    if (u.uconduct.wishes >= 13) {
-        u.uluck = LUCKMIN;
-        return;
-    }
     u.uluck += n;
     if (u.uluck < 0 && u.uluck < LUCKMIN)
         u.uluck = LUCKMIN;
@@ -949,6 +957,9 @@ long frommask;
         case PM_TORTLE:
             abil = trt_abil;
             break;
+        case PM_DRAUGR:
+            abil = dra_abil;
+            break;
         case PM_HUMAN:
             abil = hum_abil;
             break;
@@ -1151,6 +1162,9 @@ get_rabil()
     case PM_DOPPELGANGER:
         return dop_abil;
         break;
+	case PM_DRAUGR:
+		return dra_abil;
+		break;
     case PM_HUMAN:
         return hum_abil;
         break;
@@ -1183,9 +1197,9 @@ int oldlevel, newlevel;
 
     abil = role_abil(Role_switch);
     rabil = get_rabil();
-    
     while (abil || rabil) {
         /* Have we finished with the intrinsics list? */
+
         if (!abil || !abil->ability) {
             /* Try the race intrinsics */
             if (!rabil || !rabil->ability)

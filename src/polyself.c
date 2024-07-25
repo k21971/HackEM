@@ -124,7 +124,7 @@ set_uasmon()
      * make a large set of monsters immune like
      * fungus, blobs, and jellies.
      * TODO: make is_vampshifter actually work for youmonst, and include that. */
-    if (nonliving(mdat))
+    if (nonliving(mdat) || racial_zombie(&youmonst))
         BWithering |= FROMFORM;
     else
         BWithering &= ~FROMFORM;
@@ -2202,7 +2202,7 @@ int part;
              && (has_claws(mptr) || has_claws_undead(mptr))
              && !index(not_claws, mptr->mlet) && mptr != &mons[PM_STONE_GOLEM]
              && mptr != &mons[PM_INCUBUS] && mptr != &mons[PM_SUCCUBUS])
-            || Race_if(PM_DEMON) || Race_if(PM_ILLITHID) || Race_if(PM_TORTLE)))
+            || Race_if(PM_DEMON) || Race_if(PM_ILLITHID) || Race_if(PM_TORTLE) || Race_if(PM_DRAUGR)))
         return (part == HAND) ? "claw" : "clawed";
     if ((mptr == &mons[PM_MUMAK] || mptr == &mons[PM_MASTODON]
          || mptr == &mons[PM_WOOLLY_MAMMOTH])
@@ -2521,8 +2521,7 @@ polyatwill()      /* Polymorph under conscious control (#youpoly) */
         return 1;
     }
 
-    if ((Role_if(PM_ICE_MAGE) || Role_if(PM_FLAME_MAGE)) 
-        && (u.ulevel > 7 || scale_mail)) {
+    if ((Role_if(PM_ICE_MAGE) || Role_if(PM_FLAME_MAGE)) && (u.ulevel > 7 || scale_mail)) {
         /* Updated by hackemslashem: higher level and energy requirements */
         /* [ALI]
          * I've rewritten the logic here to fix the failure messages,
@@ -2558,9 +2557,11 @@ polyatwill()      /* Polymorph under conscious control (#youpoly) */
          * We deliberately don't say what form the ritual takes since it
          * is unaffected by blindness, confusion, stun etc.
          */
-        if (yn("Transform into your draconic form?") == 'n')
-            return 0;
-        else if (!scales && !scale_mail && u.uen <= EN_BABY_DRAGON) {
+        if (yn("Transform into your draconic form?") == 'n') {
+			if (!Race_if(PM_DOPPELGANGER)) {
+				return 0;
+			}
+        } else if (!scales && !scale_mail && u.uen <= EN_BABY_DRAGON) {
             You("don't have the energy to polymorph. You need at least %d!",
                 EN_BABY_DRAGON);
             return 0;

@@ -43,8 +43,7 @@ STATIC_DCL boolean FDECL(maybe_cannibal, (int, BOOLEAN_P));
 char msgbuf[BUFSZ];
 
 /* also used to see if you're allowed to eat cats and dogs */
-#define CANNIBAL_ALLOWED() (Role_if(PM_CAVEMAN) || Race_if(PM_ORC) || Race_if(PM_VAMPIRIC))
-
+#define CANNIBAL_ALLOWED() (Role_if(PM_CAVEMAN) || Race_if(PM_ORC) || Race_if(PM_VAMPIRIC) || Race_if(PM_DRAUGR))
 
 /* Rider corpses are treated as non-rotting so that attempting to eat one
    will be sure to reach the stage of eating where that meal is fatal */
@@ -99,8 +98,8 @@ register struct obj *obj;
         && (youmonst.data != &mons[PM_RUST_MONSTER] || is_rustprone(obj)))
         return TRUE;
 
-    /* Ghouls only eat non-veggy corpses or eggs (see dogfood()) */
-    if (is_ghoul(youmonst.data))
+    /* Ghouls/Draugr only eat non-veggy corpses or eggs (see dogfood()) */
+    if (is_ghoul(youmonst.data) || (!Upolyd && Race_if(PM_DRAUGR)))
         return (boolean)((obj->otyp == CORPSE
                           && !vegan(&mons[obj->corpsenm]))
                          || (obj->otyp == EGG));
@@ -598,7 +597,7 @@ int *dmg_p; /* for dishing out extra damage in lieu of Int loss */
             done(DIED);
             /* life-saving needed to reach here */
             exercise(A_WIS, FALSE);
-            if (Race_if(PM_ILLITHID)) {
+            if (!Upolyd && (Race_if(PM_ILLITHID) || Race_if(PM_DRAUGR))) {
                 if (u.ulevel >= 26)
                     *dmg_p += rn2(10) + 7;
                 else if (u.ulevel >= 14)
@@ -617,7 +616,7 @@ int *dmg_p; /* for dishing out extra damage in lieu of Int loss */
                 context.botl = 1;
             }
             exercise(A_WIS, TRUE);
-            if (Race_if(PM_ILLITHID)) {
+            if (!Upolyd && (Race_if(PM_ILLITHID) || Race_if(PM_DRAUGR))) {
                 if (u.ulevel >= 26)
                     *dmg_p += rn2(10) + 7;
                 else if (u.ulevel >= 14)
@@ -638,8 +637,10 @@ int *dmg_p; /* for dishing out extra damage in lieu of Int loss */
         /*
          * monster mind flayer is eating hero's brain
          */
-        /* no such thing as mindless players */
-        if (ABASE(A_INT) <= ATTRMIN(A_INT)) {
+		if (!Upolyd && Race_if(PM_DRAUGR)) { /* is mindless! */
+            You("don't notice.");
+            return MM_MISS;
+        } else if (ABASE(A_INT) <= ATTRMIN(A_INT)) {
             static NEARDATA const char brainlessness[] = "brainlessness";
 
             if (Lifesaved) {
@@ -686,7 +687,7 @@ int *dmg_p; /* for dishing out extra damage in lieu of Int loss */
             if (*dmg_p >= mdef->mhp && visflag && canspotmon(mdef))
                 pline("%s last thought fades away...",
                       s_suffix(Monnam(mdef)));
-            if (*dmg_p < mdef->mhp && is_zombie(magr->data)) {
+            if (*dmg_p < mdef->mhp && (is_zombie(magr->data) || racial_zombie(magr))) {
                 if (visflag && canspotmon(mdef)
                     && !(resists_sick(mdef) || defended(mdef, AD_DISE)))
                     pline("%s looks %s.", Monnam(mdef),
@@ -934,8 +935,10 @@ register struct permonst *ptr;
         ifdebugresist("can get teleport control");
         break;
     case TELEPAT:
-        res = telepathic(ptr);
-        ifdebugresist("can get telepathy");
+		if (!Race_if(PM_DRAUGR)) {
+			res = telepathic(ptr);
+			ifdebugresist("can get telepathy");
+		}
         break;
     default:
         /* res stays 0 */
@@ -1493,7 +1496,7 @@ void
 violated_vegetarian()
 {
     u.uconduct.unvegetarian++;
-    if (Role_if(PM_MONK)) {
+    if (Role_if(PM_MONK) && !Race_if(PM_DRAUGR)) { /* druagr can eat whatever they can eat */
         if (u.uconduct.unvegetarian <= 10) {
             You_feel("guilty.");
         }
@@ -1895,7 +1898,10 @@ STATIC_OVL int
 rottenfood(obj)
 struct obj *obj;
 {
-    pline("Blecch!  Rotten %s!", foodword(obj));
+	pline("%s!  Rotten %s!",
+          (!Upolyd && Race_if(PM_DRAUGR)) ? "Mmmm" : "Blecch",
+          foodword(obj));
+	if (!Race_if(PM_DRAUGR)) {
     if (!rn2(4)) {
         if (Hallucination)
             You_feel("rather trippy.");
@@ -1932,6 +1938,7 @@ struct obj *obj;
         afternmv = Hear_again;
         return 1;
     }
+	}
     return 0;
 }
 
@@ -1990,12 +1997,13 @@ struct obj *otmp;
 		      !vegetarian(&mons[mnum]) ? "meat" : "protoplasm",
 		      cannibal ? ", cannibal" : "");
 	    } else {	
-            pline("Ulch - that %s was tainted%s!",
-                (mons[mnum].mlet == S_FUNGUS) ? "fungoid vegetation"
-                    : glob ? "glob"
-                        : vegetarian(&mons[mnum]) ? "protoplasm"
-                            : "meat",
-                cannibal ? ", you cannibal" : "");
+			pline("%s - that %s was tainted%s!",
+              (!Upolyd && Race_if(PM_DRAUGR)) ? "Yum" : "Ulch",
+              (mons[mnum].mlet == S_FUNGUS) ? "fungoid vegetation"
+                  : glob ? "glob"
+                      : vegetarian(&mons[mnum]) ? "protoplasm"
+                          : "meat",
+              cannibal ? ", you cannibal" : "");
             if (Sick_resistance && !otmp->zombie_corpse) {
                 pline("It doesn't seem at all sickening, though...");
             } else if (!otmp->zombie_corpse) {
@@ -2046,7 +2054,8 @@ struct obj *otmp;
                KILLED_BY_AN); /* acid damage */
     } else if (poisonous(&mons[mnum]) && rn2(5)) {
         tp++;
-        pline("Ecch - that must have been poisonous!");
+		pline("%s - that must have been poisonous!",
+              (!Upolyd && Race_if(PM_DRAUGR)) ? "Mmmm" : "Ecch");
         if (how_resistant(POISON_RES) < 100) {
             losestr(resist_reduce(rnd(4), POISON_RES));
             losehp(resist_reduce(rnd(15), POISON_RES), !glob ? "poisonous corpse" : "poisonous glob",
@@ -2359,7 +2368,7 @@ struct obj *otmp;
             /* increasing existing nausea means that it will take longer
                before eventual vomit, but also means that constitution
                will be abused more times before illness completes */
-            if (Role_if(PM_CONVICT) && (rn2(8) > u.ulevel)) {
+            if ((!Upolyd && Race_if(PM_DRAUGR)) || Role_if(PM_CONVICT) && (rn2(8) > u.ulevel)) {
 	        You_feel("a slight stomach ache.");	/* prisoners are used to bad food */
 	    } else
                 make_vomiting((Vomiting & TIMEOUT) + (long) d(10, 4), TRUE);
@@ -3028,7 +3037,7 @@ struct obj *otmp;
         else
             return 2;
     }
-    if (otmp->orotten || (cadaver && rotted > 3L)) {
+	if ((otmp->orotten || (cadaver && rotted > 3L)) && !Race_if(PM_DRAUGR)) {
         /* Rotten */
         Sprintf(buf, "%s like %s could be rotten!  %s", foodsmell, it_or_they,
                 eat_it_anyway);
@@ -3102,9 +3111,9 @@ struct obj *otmp;
             return 2;
     }
 
-    if (((cadaver && mnum != PM_ACID_BLOB && rotted > 5L)
+	if (((cadaver && mnum != PM_ACID_BLOB && rotted > 5L)
           || (cadaver && (otmp->zombie_corpse)))
-        && Sick_resistance) {
+        && Sick_resistance && !Race_if(PM_DRAUGR)) {
         /* Tainted meat with Sick_resistance */
         Sprintf(buf, "%s like %s could be tainted!  %s",
                 foodsmell, it_or_they, eat_it_anyway);
@@ -3526,10 +3535,11 @@ gethungry()
        this first uhunger decrement, but to stay in such form the hero
        will need to wear an Amulet of Unchanging so still burn a small
        amount of nutrition in the 'moves % 20' ring/amulet check below */
-    if ((!Unaware || !rn2(10)) /* slow metabolic rate while asleep */
+	if ((!Unaware || !rn2(10)) /* slow metabolic rate while asleep */
         && !inediate(raceptr(&youmonst))
-        /* Convicts can last twice as long at hungry and below */
-        && (!Role_if(PM_CONVICT) || (moves % 2) || (u.uhs < HUNGRY))
+        /* Convicts/Draugr can last twice as long at hungry and below */
+        && (!Role_if(PM_CONVICT) || !Race_if(PM_DRAUGR)
+            || (moves % 2) || (u.uhs < HUNGRY))
         && !Slow_digestion)
         u.uhunger--; /* ordinary food consumption */
 

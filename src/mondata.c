@@ -524,11 +524,7 @@ boolean
 can_chant(mtmp)
 struct monst *mtmp;
 {
-    if ((mtmp == &youmonst && Strangled)
-        || is_silent(mtmp->data) \
-        || !has_head(mtmp->data) \
-        || mtmp->data->msound == MS_BUZZ \
-        || mtmp->data->msound == MS_BURBLE)
+    if ((mtmp == &youmonst && Strangled) || racial_zombie(&youmonst) || is_silent(mtmp->data) || !has_head(mtmp->data) || mtmp->data->msound == MS_BUZZ || mtmp->data->msound == MS_BURBLE)
         return FALSE;
     return TRUE;
 }

@@ -3511,6 +3511,18 @@ monster_nearby()
     return 0;
 }
 
+int
+specialtybonus() {
+	int spectot = 0;
+	if (u.uachieve.finish_sokoban) spectot++;
+	if (u.uachieve.killed_medusa) spectot++;
+	if (u.uachieve.killed_cerberus) spectot++;
+	if (u.uachieve.bell) spectot++;
+	if (u.uevent.uhand_of_elbereth) spectot++;
+	if (u.uachieve.killed_nightmare || u.uachieve.killed_beholder || u.uachieve.killed_vecna) spectot++;
+    return spectot;
+}
+
 void
 nomul(nval)
 register int nval;
@@ -3707,6 +3719,12 @@ weight_cap()
             youmonst.data->mmove = 10;
             youmonst.data->msize = MZ_LARGE;
         }
+	} else if (racial_zombie(&youmonst)) {
+        carrcap += 100;
+        maxcarrcap += 200;
+        /* and draugr, but just movement speed here? */
+        if (!Upolyd)
+            youmonst.data->mmove = 10;
     } else if (Upolyd) {
         /* consistent with can_carry() in mon.c */
         if (youmonst.data->mlet == S_NYMPH)

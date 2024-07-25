@@ -627,7 +627,7 @@ register struct monst *magr, *mdef;
             /* tiny/small monsters have a chance to dodge
                a zombies bite attack due to zombies being
                mindless and slow */
-            if (is_zombie(pa) && mattk->aatyp == AT_BITE
+            if ((racial_zombie(magr) || is_zombie(pa)) && mattk->aatyp == AT_BITE
                 && mdef->data->msize <= MZ_SMALL
                 && is_animal(mdef->data)
                 && !(mdef->mfrozen || mdef->mstone
@@ -1529,7 +1529,7 @@ struct obj **ootmp; /* to return worn armor for caller to disintegrate */
             mondied(mdef);
             if (mdef->mhp > 0)
                 return 0;
-            if (is_zombie(mdef->data) || is_troll(mdef->data))
+            if (racial_zombie(mdef) || is_zombie(mdef->data) || is_troll(mdef->data))
                 mdef->mcan = 1; /* no head? no reviving */
             return (MM_DEF_DIED | (grow_up(magr, mdef) ? 0 : MM_AGR_DIED));
         }
@@ -2405,7 +2405,7 @@ post_stone:
             }
             break;
         }
-        if (is_zombie(pa) && rn2(5)) {
+        if ((racial_zombie(magr) || is_zombie(pa)) && rn2(5)) {
             if (!(resists_sick(mdef) || defended(mdef, AD_DISE))) {
                 if (vis && canspotmon(mdef))
                     pline("%s looks %s.", Monnam(mdef),
@@ -3335,11 +3335,12 @@ struct obj *mwep;
                           s_suffix(mon_nam(mdef)), hliquid("acid"));
                 }
             }
-            if (resists_acid(magr) || defended(magr, AD_ACID)
-                || mon_underwater(magr)) {
-                if (canseemon(magr))
-                    pline("%s is not affected.", Monnam(magr));
-                tmp = 0;
+            if (resists_acid(magr) || defended(magr, AD_ACID) || mon_underwater(magr)) {
+				if (magr->mnum != PM_JUIBLEX) {
+					if (canseemon(magr))
+					    pline("%s is not affected.", Monnam(magr));
+					tmp = 0;
+				}
             }
         } else
             tmp = 0;

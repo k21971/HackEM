@@ -13,6 +13,8 @@
 #endif
 #include "skills.h"
 
+#define WISHSAVELENGTH 10000
+
 /*** Substructures ***/
 
 struct RoleName {
@@ -115,7 +117,7 @@ struct u_conduct {     /* number of times... */
     long uncelibate;   /* interacted with a foocubus */
     long techuse;      /* Used your techniques */
     long shk;       /* Did business with a shopkeeper */
-	char wishlist[10000];
+	char wishlist[WISHSAVELENGTH];
 	int damagedealt;
 	int damagetaken;
     /* genocides already listed at end of game */
@@ -318,6 +320,8 @@ struct you {
     int ulevel;         /* 1 to MAXULEV */
 	int tempulevel; /* used when setting techniques on save */
     int ulevelmax;
+	int lastattack; /* last skill used for attak */
+	int specialty; /* combat specialty chosen */
     unsigned utrap;     /* trap timeout */
     unsigned utraptype; /* defined if utrap nonzero. one of utraptypes */
     char urooms[5];         /* rooms (roomno + 3) occupied now */

@@ -4181,14 +4181,15 @@ int dmg; /* base amount to be adjusted by bonus or penalty */
            (if dmg is 0 for some reason, we're careful to leave it there) */
         if (dmg > 1)
             dmg = (dmg <= 3) ? 1 : dmg - 3;
-    } else if (intell <= 13 || u.ulevel < 5)
+    } else if (intell <= 13 || u.ulevel < 5) {
         ; /* no bonus or penalty; dmg remains same */
-    else if (intell <= 18)
+    } else if (intell <= 18) {
         dmg += 1;
-    else if (intell <= 24 || u.ulevel < 14)
+    } else if (intell <= 24 || u.ulevel < 14) {
         dmg += 2;
-    else
+    } else {
         dmg += 3; /* Int 25 */
+	}
 
 	if (u.specialty && u.specialty == P_ATTACK_SPELL) {
 		int spectot = specialtybonus();

@@ -2368,10 +2368,12 @@ struct obj *otmp;
             /* increasing existing nausea means that it will take longer
                before eventual vomit, but also means that constitution
                will be abused more times before illness completes */
-            if ((!Upolyd && Race_if(PM_DRAUGR)) || Role_if(PM_CONVICT) && (rn2(8) > u.ulevel)) {
-	        You_feel("a slight stomach ache.");	/* prisoners are used to bad food */
-	    } else
+			if ((!Upolyd && Race_if(PM_DRAUGR))
+                || (Role_if(PM_CONVICT) && (rn2(8) > u.ulevel))) {
+				You_feel("a slight stomach ache.");	/* prisoners are used to bad food */
+			} else {
                 make_vomiting((Vomiting & TIMEOUT) + (long) d(10, 4), TRUE);
+			}
         } else {
  give_feedback:
             pline("This %s is %s", singular(otmp, xname),

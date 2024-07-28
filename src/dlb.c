@@ -308,7 +308,13 @@ int num;
 			Sprintf(hold, "%d", num);
 		} else {
 			strcat(hold, ",");
-			Sprintf(hold2, "%d", num);
+			if (num < 10) {
+				Sprintf(hold2, "00%d", num);
+			} else if (num < 100) {
+				Sprintf(hold2, "0%d", num);
+			} else {
+				Sprintf(hold2, "%d", num);
+			}
 			strcat(hold, hold2);
 		}
 		if (mult) {

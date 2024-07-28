@@ -601,6 +601,7 @@ int psflags;
         /* Not an experienced Doppelganger yet */
         tryct = 0;
         do {
+			buf[0] = '\0';
             /* Slightly different wording */
             getlin("Attempt to become what kind of monster? [type the name]",
                    buf);

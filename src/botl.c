@@ -150,12 +150,19 @@ do_statusline2()
     hln = strlen(hlth);
 
     /* experience */
-    if (Upolyd)
-        Sprintf(expr, "HD:%d", mons[u.umonnum].mlevel);
-    else if (flags.showexp)
-        Sprintf(expr, "Xp:%d/%-1ld", u.ulevel, u.uexp);
-    else
-        Sprintf(expr, "Exp:%d", u.ulevel);
+    if (Upolyd) {
+		if (flags.showexp) {
+		    Sprintf(expr, "HD:%d, Xp:%d/%-1ld", mons[u.umonnum].mlevel, u.ulevel, u.uexp);
+		} else {
+		    Sprintf(expr, "HD:%d, Exp:%d", mons[u.umonnum].mlevel, u.ulevel);
+		}
+	} else {
+		if (flags.showexp) {
+		    Sprintf(expr, "Xp:%d/%-1ld", u.ulevel, u.uexp);
+		} else {
+		    Sprintf(expr, "Exp:%d", u.ulevel);
+		}
+	}
     xln = strlen(expr);
 
     /* time/move counter */
@@ -1089,7 +1096,7 @@ boolean *valsetlist;
             || ((i == BL_REALTIME) && !iflags.show_realtime)
 #endif
             || ((i == BL_HD) && !Upolyd)
-            || ((i == BL_XP || i == BL_EXP) && Upolyd)) {
+            || (i == BL_EXP && Upolyd)) {
             notpresent++;
             continue;
         }
@@ -1154,7 +1161,6 @@ boolean reassessment; /* TRUE: just recheck fields w/o other initialization */
         fldenabl = (fld == BL_SCORE) ? flags.showscore
                    : (fld == BL_TIME) ? flags.time
                      : (fld == BL_EXP) ? (boolean) (flags.showexp && !Upolyd)
-                       : (fld == BL_XP) ? (boolean) !Upolyd
                          : (fld == BL_HD) ? (boolean) Upolyd
 #ifdef REALTIME_ON_BOTL
                            : (fld == BL_REALTIME) ? (boolean) iflags.show_realtime

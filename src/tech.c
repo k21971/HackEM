@@ -2092,7 +2092,7 @@ specialtychoice()
 {
 	char buf[BUFSZ] = DUMMY;
     char promptbuf[BUFSZ];
-	Strcpy(promptbuf, "Enter the skill name you to specialize in");
+	Strcpy(promptbuf, "Enter the skill name you want to specialize in");
     getlin(promptbuf, buf);
 	if (!strcmpi(buf, "bare handed combat") || !strcmpi(buf, "martial arts")) {
 		u.specialty = P_BARE_HANDED_COMBAT;

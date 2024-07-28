@@ -438,7 +438,6 @@ struct inv_sub {
     { PM_VAMPIRIC, FOOD_RATION, POT_VAMPIRE_BLOOD },
     { PM_VAMPIRIC, CRAM_RATION, POT_VAMPIRE_BLOOD },
     { PM_VAMPIRIC, HOLY_WAFER, POT_VAMPIRE_BLOOD },
-    { PM_VAMPIRIC, HELMET, GAUNTLETS },
     { PM_VAMPIRIC, CHAIN_MAIL, JACKET },
     /* Giants have special considerations */
     { PM_GIANT, ROBE, LARGE_ROBE },
@@ -2345,7 +2344,7 @@ register struct trobj *origtrop;
             set_material(obj, IRON);
 
         /* Do the same for vampires and silver objects */
-        if (Race_if(PM_VAMPIRE) && obj->material == SILVER
+        if ((Race_if(PM_VAMPIRE) | Race_if(PM_VAMPIRIC)) && obj->material == SILVER
             && valid_obj_material(obj, BONE))
             set_material(obj, BONE);
         

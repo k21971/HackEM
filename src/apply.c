@@ -2213,7 +2213,30 @@ struct obj *obj;
     }
     consume_obj_charge(obj, TRUE);
 
-    if ((can = mksobj(TIN, FALSE, FALSE)) != 0) {
+	if ((Race_if(PM_VAMPIRE) || Race_if(PM_VAMPIRIC)) && (can = mksobj(POT_BLOOD, FALSE, FALSE)) != 0) {
+        static const char you_buy_it[] = "You convert it to blood, you bought it!";
+
+        if (has_omonst(corpse) && has_erac(OMONST(corpse)))
+            can->corpsenm = ERAC(OMONST(corpse))->rmnum;
+        else
+            can->corpsenm = corpse->corpsenm;
+        can->cursed = obj->cursed;
+        can->blessed = obj->blessed;
+        can->owt = weight(can);
+        can->known = 1;
+        can->bknown = obj->bknown;
+        if (carried(corpse)) {
+            if (corpse->unpaid)
+                verbalize(you_buy_it);
+            useup(corpse);
+        } else {
+            if (costly_spot(corpse->ox, corpse->oy) && !corpse->no_charge)
+                verbalize(you_buy_it);
+            useupf(corpse, 1L);
+        }
+        (void) hold_another_object(can, "You make, but cannot pick up, %s.",
+                                   doname(can), (const char *) 0);
+	} else if ((can = mksobj(TIN, FALSE, FALSE)) != 0) {
         static const char you_buy_it[] = "You tin it, you bought it!";
 
         if (has_omonst(corpse) && has_erac(OMONST(corpse)))

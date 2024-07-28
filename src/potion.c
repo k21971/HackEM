@@ -103,9 +103,10 @@ int which;
 
     /* externals and level/race based intrinsics always provide 100%
      * as do monster resistances */
-    if (u.uprops[which].extrinsic
-        || (u.uprops[which].intrinsic & (FROMEXPER | FROMRACE | FROMFORM))) {
+    if (u.uprops[which].extrinsic) {
         return 100;
+	} else if (u.uprops[which].intrinsic & (FROMEXPER | FROMRACE | FROMFORM)) {
+		val = 100;
     } else {
         val = (u.uprops[which].intrinsic & TIMEOUT);
         if (val > 100) {

@@ -1023,6 +1023,9 @@ boolean wiz_cast;
      *  and strength requirements; it any of these change, update it too.
      */
     energy = wiz_cast ? 0 : (spellev(spell) * 5); /* 5 <= energy <= 35 */
+	if (Role_if(PM_NECROMANCER) && spellid(spell) == SPE_DRAIN_LIFE) {
+		energy = 4;
+	}
     
     /* Origin gives us a discount on spellcasting. */
     if (wielding_artifact(ART_ORIGIN) && energy >= 10)
@@ -1116,7 +1119,7 @@ boolean wiz_cast;
             You("don't have enough energy to cast that spell.");
         return res;
     } else if (!wiz_cast) {
-        if (spellid(spell) != SPE_DETECT_FOOD) {
+        if (spellid(spell) != SPE_DETECT_FOOD && (!Role_if(PM_NECROMANCER) || spellid(spell) != SPE_DRAIN_LIFE)) {
             int hungr = energy * 2;
 
             /* If hero is a wizard, their current intelligence
@@ -1138,12 +1141,16 @@ boolean wiz_cast;
              * We decrease it slightly so Wizards still have superior ability. */
             if (Role_if(PM_FLAME_MAGE)) {
                 /* Flame Mages use WIS for spells */
-                intell = acurr(A_WIS) - 2; 
-            }
-            else if (Role_if(PM_ICE_MAGE))
-                intell -= 2;
-            else if (!Role_if(PM_WIZARD))
-                intell = 10;
+				if (spellid(spell) != SPE_FIRE_BOLT && spellid(spell) != SPE_FIREBALL) {
+					intell = acurr(A_WIS) - 2; 
+				}
+            } else if (Role_if(PM_ICE_MAGE)) {
+				if (spellid(spell) != SPE_FREEZE_SPHERE && spellid(spell) != SPE_CONE_OF_COLD) {
+					intell -= 2;
+				}
+            } else if (!Role_if(PM_WIZARD)) {
+                intell = 10; /* i.e no hungerless */
+			}
             
             switch (intell) {
             case 25:
@@ -2178,6 +2185,9 @@ int spell;
      */
     skill = P_SKILL(spell_skilltype(spellid(spell)));
     skill = max(skill, P_UNSKILLED) - 1; /* unskilled => 0 */
+	if (Role_if(PM_NECROMANCER) && spell_skilltype(spellid(spell)) == P_NECROMANCY_SPELL) {
+		skill++;
+	}
     difficulty =
         (spellev(spell) - 1) * 4 - ((skill * 6) + (u.ulevel / 3) + 1);
 

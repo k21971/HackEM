@@ -3965,7 +3965,7 @@ struct obj **sobjp;
             otyp2 = FAKE_AMULET_OF_YENDOR;
         } else if (otmp->otyp == SPE_BOOK_OF_THE_DEAD) {
             otyp2 = SPE_BLANK_PAPER;
-        } else if (otmp->otyp == SCR_TIME || otmp->otyp == SCR_ACQUIREMENT) {
+        } else if (otmp->otyp == SCR_TIME || otmp->otyp == SCR_ACQUIREMENT || otmp->otyp == SCR_CLONING) {
             pline_The("scroll violently resists the cloning process!");
             otyp2 = SCR_BLANK_PAPER;
         } else {
@@ -4014,6 +4014,8 @@ struct obj **sobjp;
             otmp2->spe = rn1(10, 15);
         } else if (otmp2->otyp == MAGIC_LAMP) {
             otmp2->otyp = OIL_LAMP;
+		} else if (otmp2->otyp == SCR_CLONING) {
+            otmp2->otyp = SCR_BLANK_PAPER;
         } else if (otmp2->otyp == MAGIC_MARKER) {
             otmp2->otyp = PENCIL;
             otmp2->material = WOOD;

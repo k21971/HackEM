@@ -4152,6 +4152,9 @@ struct obj *obj;
         } else {
             u.uen += bonus + halfbonus;
 		}
+		if (u.ulevel < 3 && bonus < 3) { //initial bump at lowest levels
+			u.uen += 1;
+		}
 		if (u.uen < 20 && bonus < 3) {
 			u.uen += 1;
 		}

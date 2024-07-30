@@ -2754,8 +2754,13 @@ struct monst *mtmp;
          * the monster iteself. */
         boolean vis = cansee(mtmp->mx, mtmp->my);
         mreadmsg(mtmp, otmp);
-        if (clone_mon(mtmp, 0, 0) && vis)
-            pline("%s multiplies!", Monnam(mtmp));
+		if (mtmp->data->geno & G_UNIQ) {
+			pline("%s is too powerful to replicate!", Monnam(mtmp));
+		} else {
+			if (clone_mon(mtmp, 0, 0) && vis) {
+				pline("%s multiplies!", Monnam(mtmp));
+			}
+		}
         m_useup(mtmp, otmp);
         return 2;
     } /* case MUSE_SCR_CLONING */

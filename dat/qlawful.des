@@ -187,15 +187,14 @@ OBJECT: ('%', "corpse"), $places[3], montype:"gray dragon", 0
 OBJECT: ('%', "corpse"), $places[3], montype:"silver dragon", 0
 OBJECT: ('%', "corpse"), $places[3], montype:"white dragon", 0
 OBJECT: ('%', "corpse"), $places[3], montype:"gold dragon", 0
-MONSTER: ('w', "maggot"), $places[3], hostile
-MONSTER: ('w', "maggot"), $places[3], hostile
-MONSTER: ('w', "maggot"), $places[3], hostile
-MONSTER: ('w', "maggot"), $places[3], hostile
-MONSTER: ('w', "maggot"), $places[3], hostile
-MONSTER: ('w', "maggot"), $places[3], hostile
-[50%]: MONSTER: ('w', "maggot"), $places[3], hostile
-[50%]: MONSTER: ('w', "maggot"), $places[3], hostile
-[50%]: MONSTER: ('s', "carrion crawler"), $places[3], asleep
+MONSTER: ('S', "pit viper"), $places[3], hostile
+MONSTER: ('S', "pit viper"), $places[3], hostile
+MONSTER: ('S', "pit viper"), $places[3], hostile
+MONSTER: ('S', "pit viper"), $places[3], hostile
+MONSTER: ('S', "pit viper"), $places[3], hostile
+MONSTER: ('S', "pit viper"), $places[3], hostile
+[50%]: MONSTER: ('S', "pit viper"), $places[3], hostile
+[50%]: MONSTER: ('S', "pit viper"), $places[3], hostile
 
 # snake pit
 TRAP: "spiked pit", $places[4]

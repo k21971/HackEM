@@ -637,7 +637,7 @@ nh_timeout()
             u.luckturn = moves;
         }
     }
-    
+ 
     /* WAC -- check for timeout of specials */
 	tech_timeout();
     

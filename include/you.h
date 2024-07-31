@@ -12,6 +12,7 @@
 #include "prop.h" /* (needed here for util/makedefs.c) */
 #endif
 #include "skills.h"
+#include "tech.h"
 
 #define WISHSAVELENGTH 10000
 
@@ -423,6 +424,7 @@ struct you {
     int ugifts;              /* number of artifacts bestowed */
     int ublessed, ublesscnt; /* blessing/duration from #pray */
     long lastprayed;
+	int techtimeout[MAXTECH];
     uchar lastprayresult, reconciled;
 #define PRAY_NONE   0
 #define PRAY_GOOD   1

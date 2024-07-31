@@ -196,6 +196,7 @@ static const struct innate_tech
     kni_tech[] = { 
         { 1, T_TURN_UNDEAD, 1 },
         { 1, T_HEAL_HANDS, 1 },
+        { 1, T_PRACTICE, 1 },
         { 0, 0, 0 } 
     },
         /* 5lo: for Dark Knights */
@@ -353,7 +354,7 @@ static const struct innate_tech
  */
 
 #define techt_inuse(tech)       tech_list[tech].t_inuse
-#define techtout(tech)        tech_list[tech].t_tout
+#define techtout(tech)        u.techtimeout[techid(tech)]
 #define techlev(tech)         (u.ulevel - tech_list[tech].t_lev)
 #define techid(tech)          tech_list[tech].t_id
 #define techname(tech)        (tech_names[techid(tech)])
@@ -460,7 +461,7 @@ int tlevel;
         if (tlevel < tech_list[i].t_lev)
             tech_list[i].t_lev = tlevel;
         tech_list[i].t_intrinsic |= mask;
-        tech_list[i].t_tout = 0; /* Can use immediately*/
+        /* tech_list[i].t_tout = 0; */ /* Can use immediately*/
     }
     else if (tlevel < 0) {
         if (i < 0 || !(tech_list[i].t_intrinsic & mask)) {
@@ -611,7 +612,11 @@ int *tech_no;
 		if (techid(i) == T_SPECIALTY && u.specialty) {
 			char nme[40];
 			if (u.specialty == P_BARE_HANDED_COMBAT) {
-				Sprintf(nme, "Bare Handed");
+				if (P_SKILL(P_MARTIAL_ARTS) > 0) {
+					Sprintf(nme, "Martial Arts");
+				} else {
+					Sprintf(nme, "Bare Handed");
+				}
 			} else if (u.specialty == P_DAGGER) {
 				Sprintf(nme, "Dagger");
 			} else if (u.specialty == P_KNIFE) {
@@ -1342,12 +1347,11 @@ int tech_no;
             return 0;
     }
 
-    if (res && !u.uconduct.techuse++ && moves > 10000)
-        livelog_printf(LL_CONDUCT,
-                       "performed a technique for the first time - %s",
-                       techname(tech_no));
+    if (res && !u.uconduct.techuse++ && moves > 10000) {
+        livelog_printf(LL_CONDUCT, "performed a technique for the first time - %s", techname(tech_no));
+	}
 
-    techtout(tech_no) = (t_timeout * (100 - techlev(tech_no)) / 100);
+	u.techtimeout[techid(tech_no)] = (t_timeout * (100 - techlev(tech_no)) / 100);
 
     /* By default, action should take a turn */
     return res;
@@ -1555,16 +1559,13 @@ tech_timeout()
             }
         }
 
-        if (!u.uacted)
-            continue; /* No timeout for doing nothing */
-            
         if (techtout(i) == 1) {
               pline("Your %s technique is ready to be used!", techname(i));
               stop_occupation();
         }
 
         if (techtout(i) > 0 && using_oprop(ITEM_PROWESS))
-              techtout(i)--;
+			u.techtimeout[techid(i)]--;
 
         /* Maintaining technical skill requires maintaining a healthy body and mind.
          * u.usleep - Left out because sleep is great for recovery.
@@ -1582,7 +1583,7 @@ tech_timeout()
               continue;
 
         if (techtout(i) > 0)
-              techtout(i)--;
+			u.techtimeout[techid(i)]--;
     }
 }
 

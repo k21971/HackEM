@@ -1813,6 +1813,9 @@ register struct obj *obj;
             }
         }
         break;
+	case RIN_PSYCHIC_RESISTANCE:
+        EFearless &= ~W_RING;
+        break;
     case RIN_SLEEPING: {
         long newnap = (long) rnd(100);
         long oldnap = (HSleepy & TIMEOUT);
@@ -3369,7 +3372,7 @@ find_ac()
         uac -= 1;
     }
     
-    if (tech_inuse(T_ICEARMOR)) {
+    if (u.tech_inuse[T_ICEARMOR]) {
         /* Armor and shield restrictions are checked in icebonus() */
         uac -= icebonus();
     }

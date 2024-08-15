@@ -396,9 +396,9 @@ int *attk_count, *role_roll_penalty;
     }
 
     /* special class effect uses... */
-    if (tech_inuse(T_KIII))
+    if (u.tech_inuse[T_KIII])
         tmp += 4;
-    if (tech_inuse(T_BERSERK) || tech_inuse(T_SOULEATER))
+    if (u.tech_inuse[T_BERSERK] || u.tech_inuse[T_SOULEATER])
         tmp += 2;
     if (Role_if(PM_JEDI) && uarmg && uarmg->otyp == GAUNTLETS_OF_FORCE)
         tmp += 1;
@@ -556,7 +556,7 @@ register struct monst *mtmp;
         if (flags.verbose) {
             if (uwep)
                 You("begin bashing monsters with %s.", yname(uwep));
-            else if (tech_inuse(T_EVISCERATE))
+            else if (u.tech_inuse[T_EVISCERATE])
 		        You("begin slashing monsters with your claws.");
             else if (!cantwield(youmonst.data))
                 You("begin %s monsters with your %s %s.",
@@ -706,16 +706,16 @@ int dieroll;
 	     * If special is on,  they will multihit and stun!
 	     */
 	    if (( (Race_if(PM_HUMAN_WEREWOLF) || Role_if(PM_LUNATIC) ) && (mon->mhp > 0)) ||
-				tech_inuse(T_EVISCERATE)) {
-			if (tech_inuse(T_EVISCERATE)) {
+				u.tech_inuse[T_EVISCERATE]) {
+			if (u.tech_inuse[T_EVISCERATE]) {
 				/*make slashing message elsewhere*/
 				if (repeat_hit == 0) {
 				/* [max] limit to 4 (0-3) */
-				repeat_hit = (tech_inuse(T_EVISCERATE) > 5) ?
-							4 : (tech_inuse(T_EVISCERATE) - 2);
+				repeat_hit = (u.tech_inuse[T_EVISCERATE] > 5) ?
+							4 : (u.tech_inuse[T_EVISCERATE] - 2);
 				/* [max] limit to 4 */
-				mon->mfrozen = (tech_inuse(T_EVISCERATE) > 5) ?
-							4 : (tech_inuse(T_EVISCERATE) - 2); 
+				mon->mfrozen = (u.tech_inuse[T_EVISCERATE] > 5) ?
+							4 : (u.tech_inuse[T_EVISCERATE] - 2); 
 				}
 				mon->mstun = 1;
 				mon->mcanmove = 0;
@@ -1194,7 +1194,7 @@ int dieroll;
             }
         }
         /* WAC - Hand-to-Hand Combat Techniques */
-        if (tech_inuse(T_CHI_STRIKE) && u.uen > 0) {
+        if (u.tech_inuse[T_CHI_STRIKE] && u.uen > 0) {
             You("feel a surge of force.");
             tmp += (u.uen > (10 + (u.ulevel / 5)) ? 
                 (10 + (u.ulevel / 5)) : u.uen);
@@ -1202,7 +1202,7 @@ int dieroll;
             if (u.uen < 0) 
                 u.uen = 0;
         }
-        if (tech_inuse(T_E_FIST)) {
+        if (u.tech_inuse[T_E_FIST]) {
             int dmgbonus = 0;
             hittxt = TRUE;
             dmgbonus = d(2, 4);
@@ -1616,10 +1616,10 @@ int dieroll;
                                  && uwep->otyp == ELVEN_BOW) {
                             tmp++;
                             /* WAC Extra damage if in special ability*/
-						    if (tech_inuse(T_FLURRY)) 
+						    if (u.tech_inuse[T_FLURRY]) 
                                 tmp += 2;
                         } else if (objects[obj->otyp].oc_skill == P_BOW
-					             && tech_inuse(T_FLURRY)) {
+					             && u.tech_inuse[T_FLURRY]) {
                             tmp++;
                         }
                     }
@@ -2021,21 +2021,21 @@ int dieroll;
     /* Lycanthrope claws do +level bare hands dmg
             (multi-hit, stun/freeze)..- WAC*/
 
-    if (tech_inuse(T_KIII)) {
+    if (u.tech_inuse[T_KIII]) {
         tmp *= 2;
         extend_tech_time(T_KIII, rnd(4));
     }
-    if (tech_inuse(T_BERSERK)) {
+    if (u.tech_inuse[T_BERSERK]) {
         tmp += 4;
         extend_tech_time(T_BERSERK, rnd(4));
     }
-    if (tech_inuse(T_SOULEATER)) {
+    if (u.tech_inuse[T_SOULEATER]) {
         tmp += d((u.ulevel / 4), 8);
         /* Unholy damage, not ignored from fire resistance */
         pline("Dark flames envelop %s!", mon_nam(mon));
         hittxt = TRUE;
     }
-    if (tech_inuse(T_EVISCERATE)) {
+    if (u.tech_inuse[T_EVISCERATE]) {
         tmp += rnd((int) (u.ulevel/2 + 1)) + (u.ulevel/2); /* [max] was only + u.ulevel */
         You("slash %s!", mon_nam(mon));
         hittxt = TRUE;

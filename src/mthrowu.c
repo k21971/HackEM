@@ -110,7 +110,7 @@ const char *name; /* if null, then format `*objp' */
             You("are almost hit by %s.", onm);
 
         return 0;
-    } else if (tech_inuse(T_POWER_SHIELD)) {
+    } else if (u.tech_inuse[T_POWER_SHIELD]) {
 		if (Blind || !flags.verbose) 
             pline("You block it with your shield");
 		else 

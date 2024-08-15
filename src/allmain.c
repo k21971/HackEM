@@ -236,6 +236,10 @@ boolean resuming;
     touch_whereis();
 #endif
 
+	if (!u.uachieve.finish_sokoban && In_sokoban(&u.uz) && strlen(u.sokoname) > 1) {
+        pline("%s", u.sokoname);
+    }
+
     for (;;) {
 #ifdef SAFERHANGUP
         if (program_state.done_hup)
@@ -322,7 +326,7 @@ boolean resuming;
                                         && !Underwater && using_oprop(ITEM_SURF));
                        
                         /* TECH: Blinking! */
-                        if (tech_inuse(T_BLINK) || surfing) {
+                        if (u.tech_inuse[T_BLINK] || surfing) {
                             /* Case    Average  Variance
                             * -------------------------
                             * Normal    12         0
@@ -940,7 +944,7 @@ int wtcap;
                 heal++;
             
             if (!u.uinvulnerable && u.uen > 0 && u.uhp < u.uhpmax 
-                && tech_inuse(T_CHI_HEALING)) {
+                && u.tech_inuse[T_CHI_HEALING]) {
                 u.uen--;
                 heal++;
 		    }

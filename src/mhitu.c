@@ -4416,7 +4416,7 @@ int n;
         return;
     }
     /* WAC For consistency...DO be careful using techniques ;B */
-	if (mtmp->mtame != 0 && tech_inuse(T_PRIMAL_ROAR)) {
+	if (mtmp->mtame != 0 && u.tech_inuse[T_PRIMAL_ROAR]) {
 		n *= 2; /* Double Damage! */
 	}
     showdmg(n, TRUE);
@@ -4911,7 +4911,7 @@ struct attack *mattk;
     
     /* Ice Armor tech for Ice Mages. As they get stronger their 
      * ice armor becomes more powerful. */
-    if (tech_inuse(T_ICEARMOR)) {
+    if (u.tech_inuse[T_ICEARMOR]) {
         int icetmp = icebonus();
         if (resists_cold(mtmp) || defended(mtmp, AD_COLD)) {
             shieldeff(mtmp->mx, mtmp->my);

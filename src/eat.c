@@ -19,7 +19,6 @@ STATIC_DCL struct obj *FDECL(touchfood, (struct obj *));
 STATIC_DCL void NDECL(do_reset_eat);
 STATIC_DCL void FDECL(done_eating, (BOOLEAN_P));
 STATIC_DCL void FDECL(cprefx, (int));
-STATIC_DCL void FDECL(givit, (int, struct permonst *));
 STATIC_DCL void FDECL(cpostfx, (int));
 STATIC_DCL void FDECL(consume_tin, (const char *));
 STATIC_DCL void FDECL(start_tin, (struct obj *));
@@ -1000,127 +999,127 @@ struct permonst *ptr;
 /* givit() tries to give you an intrinsic based on the monster's level
  * and what type of intrinsic it is trying to give you.
  */
-STATIC_OVL void
+void
 givit(type, ptr)
 int type;
 register struct permonst *ptr;
 {
-    const char *adj;
-    long percentincrease;
-    debugpline1("Attempting to give intrinsic %d", type);
+	const char *adj;
+	long percentincrease;
+	debugpline1("Attempting to give intrinsic %d", type);
 
-    percentincrease = (ptr->cwt / 90);
-    if (percentincrease < 5) { percentincrease = 5; }
+	percentincrease = (ptr->cwt / 90);
+	if (percentincrease < 5) { percentincrease = 5; }
 
-    if (percentincrease > 32) {
-        adj = "much";
-    } else if (percentincrease > 20) {
-        adj = "significantly";
-    } else if (percentincrease > 15) {
-        adj = "considerably";
-    } else if (percentincrease > 8) {
-        adj = "somewhat";
-    } else if (percentincrease > 5) {
-        adj = "a bit";
-    } else {
-        adj = "slightly";
-    }
+	if (percentincrease > 32) {
+		adj = "much";
+	} else if (percentincrease > 20) {
+		adj = "significantly";
+	} else if (percentincrease > 15) {
+		adj = "considerably";
+	} else if (percentincrease > 8) {
+		adj = "somewhat";
+	} else if (percentincrease > 5) {
+		adj = "a bit";
+	} else {
+		adj = "slightly";
+	}
 
-    switch (type) {
-    /* All these use the new system, which is based on corpse weight. */
-    case FIRE_RES:
-        debugpline0("Trying to give fire resistance");
-        if ((HFire_resistance & (TIMEOUT | FROMRACE | FROMEXPER)) < 100) {
-            incr_resistance(&HFire_resistance, percentincrease);
-            if ((HFire_resistance & TIMEOUT) == 100)
-                You(Hallucination ? "be chillin'." : "feel completely chilled.");
-            else
-                You_feel("%s more chill.", adj);
-        }
-        break;
-    case SLEEP_RES:
-        debugpline0("Trying to give sleep resistance");
-        if ((HSleep_resistance & (TIMEOUT | FROMRACE | FROMEXPER)) < 100) {
-            incr_resistance(&HSleep_resistance, percentincrease);
-            if ((HSleep_resistance & TIMEOUT) == 100)
-                You_feel("wide awake.");
-            else
-                You_feel("%s perkier.", adj);
-        }
-        break;
-    case COLD_RES:
-        debugpline0("Trying to give cold resistance");
-        if ((HCold_resistance & (TIMEOUT | FROMRACE | FROMEXPER)) < 100) {
-            incr_resistance(&HCold_resistance, percentincrease);
-            if ((HCold_resistance & TIMEOUT) == 100)
-                You_feel("full of hot air.");
-            else
-                You_feel("%s warmer.", adj);
-        }
-        break;
-    case DISINT_RES:
-        debugpline0("Trying to give disintegration resistance");
-        if ((HDisint_resistance & (TIMEOUT | FROMRACE | FROMEXPER)) < 100) {
-            incr_resistance(&HDisint_resistance, percentincrease);
-            if ((HDisint_resistance & TIMEOUT) == 100)
-                You_feel(Hallucination ? "totally together, man." : "completely firm.");
-            else
-                You_feel("%s more firm.", adj);
-        }
-        break;
-    case SHOCK_RES: /* shock (electricity) resistance */
-        debugpline0("Trying to give shock resistance");
-        if ((HShock_resistance & (TIMEOUT | FROMRACE | FROMEXPER)) < 100) {
-            incr_resistance(&HShock_resistance, percentincrease);
-            if ((HShock_resistance & TIMEOUT) == 100)
-                pline(Hallucination ? "You feel grounded in reality."
-                                    : "Your health feels completely amplified!");
-            else
-                Your("health is %s more amplified!", adj);
-        }
-        break;
-    case POISON_RES:
-        debugpline0("Trying to give poison resistance");
-        if ((HPoison_resistance & (TIMEOUT | FROMRACE | FROMEXPER)) < 100) {
-            incr_resistance(&HPoison_resistance, percentincrease);
-            if ((HPoison_resistance & TIMEOUT) == 100)
-                You_feel("completely healthy.");
-            else
-                You_feel("%s healthier.", adj);
-        }
-        break;
-    case TELEPORT:
-        debugpline0("Trying to give teleport");
-        if (!(HTeleportation & (FROMOUTSIDE | FROMRACE | FROMEXPER))
-            && !rn2(5)) {
-            You_feel(Hallucination ? "diffuse." : "very jumpy.");
-            HTeleportation |= FROMOUTSIDE;
-        }
-        break;
-    case TELEPORT_CONTROL:
-        debugpline0("Trying to give teleport control");
-        if (!(HTeleport_control & (FROMOUTSIDE | FROMRACE | FROMEXPER))
-            && !rn2(10)) {
-            You_feel(Hallucination ? "centered in your personal space."
-                                   : "in control of yourself.");
-            HTeleport_control |= FROMOUTSIDE;
-        }
-        break;
-    case TELEPAT:
-        debugpline0("Trying to give telepathy");
-        if (!(HTelepat & (FROMOUTSIDE | FROMRACE | FROMEXPER))) {
-            You_feel(Hallucination ? "in touch with the cosmos."
-                                   : "a strange mental acuity.");
-            HTelepat |= FROMOUTSIDE;
-            /* If blind, make sure monsters show up. */
-            if (Blind)
-                see_monsters();
-        }
-        break;
-    default:
-        debugpline0("Tried to give an impossible intrinsic");
-        break;
-    }
+	switch (type) {
+	/* All these use the new system, which is based on corpse weight. */
+	case FIRE_RES:
+		debugpline0("Trying to give fire resistance");
+		if ((HFire_resistance & (TIMEOUT | FROMRACE | FROMEXPER)) < 100) {
+			incr_resistance(&HFire_resistance, percentincrease);
+			if ((HFire_resistance & TIMEOUT) == 100)
+				You(Hallucination ? "be chillin'." : "feel completely chilled.");
+			else
+				You_feel("%s more chill.", adj);
+		}
+		break;
+	case SLEEP_RES:
+		debugpline0("Trying to give sleep resistance");
+		if ((HSleep_resistance & (TIMEOUT | FROMRACE | FROMEXPER)) < 100) {
+			incr_resistance(&HSleep_resistance, percentincrease);
+			if ((HSleep_resistance & TIMEOUT) == 100)
+				You_feel("wide awake.");
+			else
+				You_feel("%s perkier.", adj);
+		}
+		break;
+	case COLD_RES:
+		debugpline0("Trying to give cold resistance");
+		if ((HCold_resistance & (TIMEOUT | FROMRACE | FROMEXPER)) < 100) {
+			incr_resistance(&HCold_resistance, percentincrease);
+			if ((HCold_resistance & TIMEOUT) == 100)
+				You_feel("full of hot air.");
+			else
+				You_feel("%s warmer.", adj);
+		}
+		break;
+	case DISINT_RES:
+		debugpline0("Trying to give disintegration resistance");
+		if ((HDisint_resistance & (TIMEOUT | FROMRACE | FROMEXPER)) < 100) {
+			incr_resistance(&HDisint_resistance, percentincrease);
+			if ((HDisint_resistance & TIMEOUT) == 100)
+				You_feel(Hallucination ? "totally together, man." : "completely firm.");
+			else
+				You_feel("%s more firm.", adj);
+		}
+		break;
+	case SHOCK_RES: /* shock (electricity) resistance */
+		debugpline0("Trying to give shock resistance");
+		if ((HShock_resistance & (TIMEOUT | FROMRACE | FROMEXPER)) < 100) {
+			incr_resistance(&HShock_resistance, percentincrease);
+			if ((HShock_resistance & TIMEOUT) == 100)
+				pline(Hallucination ? "You feel grounded in reality."
+									: "Your health feels completely amplified!");
+			else
+				Your("health is %s more amplified!", adj);
+		}
+		break;
+	case POISON_RES:
+		debugpline0("Trying to give poison resistance");
+		if ((HPoison_resistance & (TIMEOUT | FROMRACE | FROMEXPER)) < 100) {
+			incr_resistance(&HPoison_resistance, percentincrease);
+			if ((HPoison_resistance & TIMEOUT) == 100)
+				You_feel("completely healthy.");
+			else
+				You_feel("%s healthier.", adj);
+		}
+		break;
+	case TELEPORT:
+		debugpline0("Trying to give teleport");
+		if (!(HTeleportation & (FROMOUTSIDE | FROMRACE | FROMEXPER))
+			&& !rn2(5)) {
+			You_feel(Hallucination ? "diffuse." : "very jumpy.");
+			HTeleportation |= FROMOUTSIDE;
+		}
+		break;
+	case TELEPORT_CONTROL:
+		debugpline0("Trying to give teleport control");
+		if (!(HTeleport_control & (FROMOUTSIDE | FROMRACE | FROMEXPER))
+			&& !rn2(10)) {
+			You_feel(Hallucination ? "centered in your personal space."
+								   : "in control of yourself.");
+			HTeleport_control |= FROMOUTSIDE;
+		}
+		break;
+	case TELEPAT:
+		debugpline0("Trying to give telepathy");
+		if (!(HTelepat & (FROMOUTSIDE | FROMRACE | FROMEXPER))) {
+			You_feel(Hallucination ? "in touch with the cosmos."
+								   : "a strange mental acuity.");
+			HTelepat |= FROMOUTSIDE;
+			/* If blind, make sure monsters show up. */
+			if (Blind)
+				see_monsters();
+		}
+		break;
+	default:
+		debugpline0("Tried to give an impossible intrinsic");
+		break;
+	}
 }
 
 /* Choose (one of) the intrinsics granted by a corpse, and return it.
@@ -1579,6 +1578,23 @@ char *buf;
                 Sprintf(eos(buf), "%s", mons[mnum].mname);
             else
                 Sprintf(eos(buf), "%s meat", mons[mnum].mname);
+        }
+    }
+}
+
+/*
+ * This assumes that buf already contains the word "tin",
+ * as is the case with caller xname().
+ */
+void
+blood_details(obj, mnum, buf)
+struct obj *obj;
+int mnum;
+char *buf;
+{
+    if (obj && buf) {
+        if (mnum != NON_PM) {
+            Sprintf(buf, "potion of %s blood", mons[mnum].mname);
         }
     }
 }

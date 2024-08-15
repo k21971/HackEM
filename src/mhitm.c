@@ -2833,7 +2833,7 @@ msickness:
         return res;
         
     /* WAC -- Caveman Primal Roar ability */
-    if (magr->mtame != 0 && tech_inuse(T_PRIMAL_ROAR)) {
+    if (magr->mtame != 0 && u.tech_inuse[T_PRIMAL_ROAR]) {
         tmp *= 2; /* Double Damage! */
     }
 

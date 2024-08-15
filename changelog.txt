@@ -1,0 +1,145 @@
+This changelog starts with changes made in version 1.3.0 and beyond.
+
+1.3.0 changes:
+
+- Remove the note about not learning a lot of spells as everyone appears capable of learning 58 spells.
+
+- Fix bag of holding dissapearing on game load by using nearly precisely the same saving and loading code as Evilhack.
+
+- Altars no longer get destroyed
+
+- Hand of Vecna is now 10aum instead of 300aum.
+
+- Added ring of psyhcic resistance, removed "mood ring" to not alter the ring totals as those are currently fixed at the number of current ring types.
+
+- Wishing for object properties is allowed again.
+
+- Wishing penalties do NOT apply in wizard mode in order to allow for proper testing.
+
+- Raised level where dopplegangers gain polymorph control to 25th level, which is similar to SlashThem
+
+- Extrinsic resistance always results in 100% resistance, which is similar to Draugur in Evilhack
+
+- The first 2 wishes do NOT impact luck.  Then each additional wish decreases luck by one up to -10.  (-1 luck after 3 wishes, -2 luck after 4 wishes, etc.)
+
+- Monster spawn rates aren't impacted for the first 3 wishes, after that the spawn rate is based on the rate listed minus 2 wishes.  (2x spawn rate after 4 wishes, 3x spawn rate after 5 wishes, etc.)
+
+- Added 2 forge recipies from Evilhack (Mace via Club + Dagger and Club via 2 arrows + 2 crossbow bolts).
+
+- "showdmg" will now only show damage you deal and damage dealt to you.  It won't show damage the creatures take arbitrarily.
+
+- The "showdmg" no longer will show [0 dmg] entries, those are suppressed.
+
+- Show damage taken in end game log
+
+- Show damage dealt in end game log
+
+- Show wishes in end game log
+
+- Pet stealing from stores is possible again
+
+----------
+
+1.3.1 changes:
+
+- Merge in Draugur race from Evilhack
+	Draugr wearing an amulet of life saving will not beneift from it, but will still use their inate life saving ability.
+
+- Reduced devil prince bribe cost to 200 times player level instead of 500 times player level.  It was unrealistic for any player to have that much gold in open inventory and this makes it a viable option.
+
+- Bat from Hell is the Rogue first sacrifice gift again
+
+- Modified the developer email in the code to be nethack-cleaner@proton.me instead of the old dev info.
+
+- Put commas in separating thousands for damage dealt and damage taken in end game logs.
+
+- Replace the hard coded 10000 in size of the stored wishes made with a #define
+
+- Merged in memory leak fix:  https://github.com/elunna/hackem/pull/533/commits
+
+- Namable Crysknifes: Arvon, Krelln from dev repository from 1.2 branch
+
+- Increase player damage against normal mobs in the mid to late game due to the extreme grindness of Hackem against normal mobs.  The suggestion was to bring back "flat damage" for artifacts, i.e. +6 instead of +d6, but the change is to increase the damage for the primary selected types of each character in order to give "lances" and other non-artifact damage sources a chance to remain viable in the later game.
+	Specialization points are gained at the following times:
+		finish_sokoban
+		killed_medusa
+		killed_cerberus
+		first one of these: killed_nightmare, killed_beholder, killed_vecna
+		bell
+		crowning
+	These each give a +1 to usage of a skill to do damage.  Up to +6 maximum bonus.  You can select "two weapon" if you are two weaponing or "long sword" or even "attack spell" or any other skill, even ones you are restricted in.
+	The specialization the player uses can be set in the #tech menu and can be reset every 1,000 to 1,500 turns.
+
+- Removed the "Stacked Dozen" sokoban level as it was confusing without using a spoiler.
+
+- When using a blessed scroll of transmogrify the properties listed as "bad props" will be rerolled (fumble, hunger, stench, tele, slow, danger, burden).  The reason is that there are a LOT of properties already so scrolls of transmogrify are currently hardly ever what you want and often pretty bad.  This way they are still hardly ever what you want, but at least never terrible.
+
+- Expanded the roles available to vampire (added Knight) and doppleganger (added Flame Mage, Ice Mage, Knight, Necromancer, Pirate)
+
+- Fix issue with 1.3.0 where saving with fear would crash the game when you moved directionally again.  The fix was that the object of your fear is no longer considered.  This is not an ideal fix, but until we are 100% positive that the bag of holding bug is fixed we are going to err on the side of not breaking the game rather than ideal fixes.
+
+- Several "boss monsters" were given buffs:
+	Juiblex:  Previously a level one character with acid and sickness resistance could battle Juiblex for quite a while :)  Now the damage components of most of Juiblex's attacks ignore resistance!
+	Baalzebub:  Increased speed from 12 to 14.  So be careful that you don't get chain-stunned if you are not at least "fast" speed!
+	Geryon:  Increased speed from 12 to 18 and increased all damage dice by 1.
+	Dispater:  Added an additional spell attack.
+	Yeenoghu:  Added an additional withering attack.
+	Lolth:  Increased speed from 12 to 16.
+	Asmodeus: Increased speed from 12 to 16.
+	Demogorgon: Added an additional physical damage bite attack.
+
+- Changed polymorph control for dopplegangers to level 15.
+
+- Reverse genocide no longer makes humans feel guilty or lose alignment
+
+- 13 wishes no longer always sets your luck to the worst possible luck
+
+- Continue to show player level in bottom status lines while polymorphed
+
+- Increased mana gain for necromancers at lower mana.
+
+- There was often a bunch of extra text displaying when using #youpoly.  This display bug is fixed
+
+- Fixed wording on the "specialization" prompt
+
+- Vampires no longer replace their helmet for a gauntlets since they can wear helms.
+
+- Vampires get blood when using tinning kits
+
+- Show skill slots available in enhancement menu
+
+- Necromancers have +1 effective spell level for necromantic spells in relation to their casting success.
+
+- Necromancers cast drain life for 4 mana and cast drain life without incuring hunger.
+
+- Flame mage have the same hungerless casting as wizard when using "fire bolt" or "fire ball".  Normally they have hungerless equivilent to a wizard 2 intelligence less.
+
+- Ice mage have the same hungerless casting as wizard when using "freeze sphere" or "cone of cold".  Normally they have hungerless equivilent to a wizard 2 intelligence less.
+
+- Uniques cannot replicate themselves with a scroll of clonging any more.
+
+- spawn point for magic key on "mimic of the mines" can be broken by the location of the stairs.
+
+- The dragon corpses in the law quest can now be gotten to if you are quick enough
+
+----------
+
+1.3.2 changes:
+
+- If your attack specialty is "bare handed/martial arts" and you know "martial arts" it will show "Martial Arts" instead of "Bare Handed" in the #tech menu when the specialty is set.
+
+- Techniques are refreshed turn by turn even if you don't act.  Everything else allows you to "sit and wait", I didn't see a reason techniques worked differently.  Plus it made it harder to do any testing :)
+
+- Knights now get "weapon practice" technique at level 1.
+
+- Dipping a negatively enchanted item into a potion of amnesia removes the negative enchantment in addition to other effects that already existed from that type of dipping
+
+- Fixed Monster spell 10 cast  Program in disorder!  (Saving and reloading may fix this problem.)
+
+- When in Sokoban the name of the level will display when you re-load the game as long as you haven't solved Sokoban.
+
+- Ring of psychic resistance also makes you "fearless"
+
+- Potions of blood now indicate the monster type of they are made with a tinning kit by a vampire.  If that monster would have given an intrinsic for eating it, then the blood will also give that intrinsic.  Drinking a potion of blood will not give you any problems that eating the creature would have given, i.e. "turning to stone for a cockatrice", etc.
+
+- Give Vampire Knights 'Dirge' which they otherwise can never get as their crowning gift instead of Stormbringer

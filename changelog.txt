@@ -26,6 +26,8 @@ The changes are listed in reverse order so the newer changes are on top.
 
 - Vampires are immune to level drain via blood drain
 
+- Blessed scrolls of magic mapping also detect objects
+
 ----------
 
 1.3.1 changes:

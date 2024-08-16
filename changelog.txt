@@ -1,42 +1,28 @@
 This changelog starts with changes made in version 1.3.0 and beyond.
 
-1.3.0 changes:
+The changes are listed in reverse order so the newer changes are on top.
 
-- Remove the note about not learning a lot of spells as everyone appears capable of learning 58 spells.
+----------
 
-- Fix bag of holding dissapearing on game load by using nearly precisely the same saving and loading code as Evilhack.
+1.3.2 changes:
 
-- Altars no longer get destroyed
+- If your attack specialty is "bare handed/martial arts" and you know "martial arts" it will show "Martial Arts" instead of "Bare Handed" in the #tech menu when the specialty is set.
 
-- Hand of Vecna is now 10aum instead of 300aum.
+- Techniques are refreshed turn by turn even if you don't act.  Everything else allows you to "sit and wait", I didn't see a reason techniques worked differently.  Plus it made it harder to do any testing :)
 
-- Added ring of psyhcic resistance, removed "mood ring" to not alter the ring totals as those are currently fixed at the number of current ring types.
+- Knights now get "weapon practice" technique at level 1.
 
-- Wishing for object properties is allowed again.
+- Dipping a negatively enchanted item into a potion of amnesia removes the negative enchantment in addition to other effects that already existed from that type of dipping
 
-- Wishing penalties do NOT apply in wizard mode in order to allow for proper testing.
+- Fixed Monster spell 10 cast  Program in disorder!  (Saving and reloading may fix this problem.)
 
-- Raised level where dopplegangers gain polymorph control to 25th level, which is similar to SlashThem
+- When in Sokoban the name of the level will display when you re-load the game as long as you haven't solved Sokoban.
 
-- Extrinsic resistance always results in 100% resistance, which is similar to Draugur in Evilhack
+- Ring of psychic resistance also makes you "fearless"
 
-- The first 2 wishes do NOT impact luck.  Then each additional wish decreases luck by one up to -10.  (-1 luck after 3 wishes, -2 luck after 4 wishes, etc.)
+- Potions of blood now indicate the monster type of they are made with a tinning kit by a vampire.  If that monster would have given an intrinsic for eating it, then the blood will also give that intrinsic.  Drinking a potion of blood will not give you any problems that eating the creature would have given, i.e. "turning to stone for a cockatrice", etc.
 
-- Monster spawn rates aren't impacted for the first 3 wishes, after that the spawn rate is based on the rate listed minus 2 wishes.  (2x spawn rate after 4 wishes, 3x spawn rate after 5 wishes, etc.)
-
-- Added 2 forge recipies from Evilhack (Mace via Club + Dagger and Club via 2 arrows + 2 crossbow bolts).
-
-- "showdmg" will now only show damage you deal and damage dealt to you.  It won't show damage the creatures take arbitrarily.
-
-- The "showdmg" no longer will show [0 dmg] entries, those are suppressed.
-
-- Show damage taken in end game log
-
-- Show damage dealt in end game log
-
-- Show wishes in end game log
-
-- Pet stealing from stores is possible again
+- Give Vampire Knights 'Dirge' which they otherwise can never get as their crowning gift instead of Stormbringer
 
 ----------
 
@@ -124,22 +110,40 @@ This changelog starts with changes made in version 1.3.0 and beyond.
 
 ----------
 
-1.3.2 changes:
+1.3.0 changes:
 
-- If your attack specialty is "bare handed/martial arts" and you know "martial arts" it will show "Martial Arts" instead of "Bare Handed" in the #tech menu when the specialty is set.
+- Remove the note about not learning a lot of spells as everyone appears capable of learning 58 spells.
 
-- Techniques are refreshed turn by turn even if you don't act.  Everything else allows you to "sit and wait", I didn't see a reason techniques worked differently.  Plus it made it harder to do any testing :)
+- Fix bag of holding dissapearing on game load by using nearly precisely the same saving and loading code as Evilhack.
 
-- Knights now get "weapon practice" technique at level 1.
+- Altars no longer get destroyed
 
-- Dipping a negatively enchanted item into a potion of amnesia removes the negative enchantment in addition to other effects that already existed from that type of dipping
+- Hand of Vecna is now 10aum instead of 300aum.
 
-- Fixed Monster spell 10 cast  Program in disorder!  (Saving and reloading may fix this problem.)
+- Added ring of psyhcic resistance, removed "mood ring" to not alter the ring totals as those are currently fixed at the number of current ring types.
 
-- When in Sokoban the name of the level will display when you re-load the game as long as you haven't solved Sokoban.
+- Wishing for object properties is allowed again.
 
-- Ring of psychic resistance also makes you "fearless"
+- Wishing penalties do NOT apply in wizard mode in order to allow for proper testing.
 
-- Potions of blood now indicate the monster type of they are made with a tinning kit by a vampire.  If that monster would have given an intrinsic for eating it, then the blood will also give that intrinsic.  Drinking a potion of blood will not give you any problems that eating the creature would have given, i.e. "turning to stone for a cockatrice", etc.
+- Raised level where dopplegangers gain polymorph control to 25th level, which is similar to SlashThem
 
-- Give Vampire Knights 'Dirge' which they otherwise can never get as their crowning gift instead of Stormbringer
+- Extrinsic resistance always results in 100% resistance, which is similar to Draugur in Evilhack
+
+- The first 2 wishes do NOT impact luck.  Then each additional wish decreases luck by one up to -10.  (-1 luck after 3 wishes, -2 luck after 4 wishes, etc.)
+
+- Monster spawn rates aren't impacted for the first 3 wishes, after that the spawn rate is based on the rate listed minus 2 wishes.  (2x spawn rate after 4 wishes, 3x spawn rate after 5 wishes, etc.)
+
+- Added 2 forge recipies from Evilhack (Mace via Club + Dagger and Club via 2 arrows + 2 crossbow bolts).
+
+- "showdmg" will now only show damage you deal and damage dealt to you.  It won't show damage the creatures take arbitrarily.
+
+- The "showdmg" no longer will show [0 dmg] entries, those are suppressed.
+
+- Show damage taken in end game log
+
+- Show damage dealt in end game log
+
+- Show wishes in end game log
+
+- Pet stealing from stores is possible again

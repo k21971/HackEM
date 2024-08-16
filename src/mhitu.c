@@ -1979,7 +1979,9 @@ register struct attack *mattk;
                 if (mtmp->mtame && !mtmp->isminion)
                     EDOG(mtmp)->hungrytime +=
                             ((int) ((youmonst.data)->cnutrit / 20) + 1);
-                losexp("life drainage");
+				if (!Drain_resistance) {
+					losexp("life drainage");
+				}
             } else {
                 monstseesu(M_SEEN_DRAIN);
             }

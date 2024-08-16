@@ -28,6 +28,8 @@ The changes are listed in reverse order so the newer changes are on top.
 
 - Blessed scrolls of magic mapping also detect objects
 
+- Eating rings of resistance gives 50% resistance per time.  It used to give NONE, which was an error.  100% was the original design, but 50% seems more appropriate.
+
 ----------
 
 1.3.1 changes:

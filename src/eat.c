@@ -2475,10 +2475,52 @@ struct obj *otmp;
             if (!objects[typ].oc_oprop)
                 break; /* should never happen */
 
-            if (!(u.uprops[objects[typ].oc_oprop].intrinsic & FROMOUTSIDE))
+            if (!(u.uprops[objects[typ].oc_oprop].intrinsic & FROMOUTSIDE)) {
                 accessory_has_effect(otmp);
-
+			}
             u.uprops[objects[typ].oc_oprop].intrinsic |= FROMOUTSIDE;
+			switch (objects[typ].oc_oprop) {
+				case FIRE_RES:
+					incr_resistance(&HFire_resistance, 50);
+					if ((HFire_resistance & TIMEOUT) == 100) {
+						You(Hallucination ? "be chillin'." : "feel completely chilled.");
+					} else {
+						You_feel("much more chill.");
+					}
+					break;
+				case COLD_RES:
+					incr_resistance(&HCold_resistance, 50);
+					if ((HCold_resistance & TIMEOUT) == 100) {
+						You_feel("full of hot air.");
+					} else {
+						You_feel("much warmer.");
+					}
+					break;
+				case DISINT_RES:
+					incr_resistance(&HDisint_resistance, 50);
+					if ((HDisint_resistance & TIMEOUT) == 100) {
+						You_feel(Hallucination ? "totally together, man." : "completely firm.");
+					} else {
+						You_feel("much more firm.");
+					}
+					break;
+				case SHOCK_RES:
+					incr_resistance(&HShock_resistance, 50);
+					if ((HShock_resistance & TIMEOUT) == 100) {
+						pline(Hallucination ? "You feel grounded in reality." : "Your health feels completely amplified!");
+					} else {
+						Your("health is much more amplified!");
+					}
+					break;
+				case POISON_RES:
+					incr_resistance(&HPoison_resistance, 50);
+					if ((HPoison_resistance & TIMEOUT) == 100) {
+						You_feel("completely healthy.");
+					} else {
+						You_feel("much healthier.");
+					}
+					break;
+			}
 
             switch (typ) {
             case RIN_SEE_INVISIBLE:

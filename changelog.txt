@@ -24,6 +24,8 @@ The changes are listed in reverse order so the newer changes are on top.
 
 - Give Vampire Knights 'Dirge' which they otherwise can never get as their crowning gift instead of Stormbringer
 
+- Vampires are immune to level drain via blood drain
+
 ----------
 
 1.3.1 changes:

@@ -2466,6 +2466,9 @@ struct obj *sobj; /* sobj - scroll or fake spellbook for spell */
             if (cval)
                 HConfusion = 1; /* to screw up map */
             do_mapping(cval);
+			if (sobj->blessed && !cval) { /* objects, too, pal! */
+				object_detect(sobj,0);
+			}
             if (cval) {
                 HConfusion = 0; /* restore */
                 pline("Unfortunately, you can't grasp the details.");

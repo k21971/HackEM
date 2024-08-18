@@ -1621,9 +1621,6 @@ u_init()
         knows_class(ARMOR_CLASS);
         skill_init(Skill_Y);
         break;
-    default: /* impossible */
-        pline("u_init: unknown role %d", Role_switch);
-        break;
     }
 
     /*** Race-specific initializations ***/
@@ -1830,10 +1827,6 @@ u_init()
             /* prevent automatic alignment abuse penalty */
             u.ualign.abuse = 0;
         }
-        break;
-        
-    default: /* impossible */
-        pline("u_init: unknown race %d", Race_switch);
         break;
     }
 

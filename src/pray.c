@@ -924,6 +924,10 @@ gcrownu()
                            "was chosen to take lives for the Glory of %s",
                            u_gname());
 
+		} else if (Role_if(PM_KNIGHT) && Race_if(PM_VAMPIRIC)) {
+            in_hand = wielding_artifact(ART_DIRGE);
+            already_exists =
+                exist_artifact(RUNESWORD, artiname(ART_DIRGE));
         } else {
             verbalize("Thou art chosen to %s for My Glory!",
                       ((already_exists && !in_hand)

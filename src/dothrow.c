@@ -276,9 +276,9 @@ int shotlimit;
             multishot = rnd(multishot);
 
         /* Tech: Flurry */
-        if (objects[obj->otyp].oc_skill == -P_BOW && tech_inuse(T_FLURRY))
+        if (objects[obj->otyp].oc_skill == -P_BOW && u.tech_inuse[T_FLURRY])
             multishot += 1; /* Let'em rip! */
-        if (objects[obj->otyp].oc_skill == -P_SLING && tech_inuse(T_FLURRY))
+        if (objects[obj->otyp].oc_skill == -P_SLING && u.tech_inuse[T_FLURRY])
             multishot += 1; /* Let'em rip! */
         
         multishot = rnd(multishot);

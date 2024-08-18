@@ -1618,7 +1618,39 @@ no_rise:
             if (!otmp->cursed)
                 lesshungry((otmp->odiluted ? 1 : 2) *
                            (otmp->otyp == POT_VAMPIRE_BLOOD ? 400 :
-                            otmp->blessed ? 100 : 30));
+                            otmp->blessed ? 100 : 40));
+/* possibly convey an intrinsic */
+    if (otmp->otyp == POT_BLOOD && otmp->corpsenm > 0) {
+        int pm = otmp->corpsenm;
+        struct permonst *ptr = &mons[pm];
+        boolean conveys_STR = is_giant(ptr);
+        int j;      
+                        
+        if (dmgtype(ptr, AD_STUN) || dmgtype(ptr, AD_HALU)
+            || pm == PM_VIOLET_FUNGUS) {
+            pline("Oh wow!  Great stuff!");
+            (void) make_hallucinated((HHallucination & TIMEOUT) + 200L, FALSE,
+                                     0L);
+        }
+
+        int tmp = 0;   /* which one we will try to give */
+        if (conveys_STR) {
+            tmp = -1; /* use -1 as fake prop index for STR */
+            debugpline1("\"Intrinsic\" strength, %d", tmp);
+        }
+        for (j = 1; j <= LAST_PROP; j++) {
+            if (!intrinsic_possible(j, ptr)) {
+                continue;
+            }
+            givit(j, ptr);
+        }
+
+        /* if something was chosen, give it now givit() might fail) */
+        if (tmp == -1)
+            gainstr((struct obj *) 0, 0, TRUE);
+        else if (tmp > 0)
+            givit(tmp, ptr);
+    } /* check_intrinsics */
             if (otmp->otyp == POT_VAMPIRE_BLOOD && otmp->blessed) {
                 int num = newhp();
                 if (Upolyd) {

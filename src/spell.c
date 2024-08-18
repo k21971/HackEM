@@ -1112,7 +1112,7 @@ boolean wiz_cast;
         res = 1; /* time is going to elapse even if spell doesn't get cast */
     }
 
-    if (energy > u.uen && !tech_inuse(T_BLOOD_MAGIC)) {
+    if (energy > u.uen && !u.tech_inuse[T_BLOOD_MAGIC]) {
         if (spellid(spell) == SPE_PSIONIC_WAVE)
             Your("mind is fatigued.  You cannot use your psychic energy.");
         else
@@ -1229,7 +1229,7 @@ boolean wiz_cast;
             losehp(energy, killer.name, KILLED_BY);
         }
     }         
-    else if (energy > u.uen && tech_inuse(T_BLOOD_MAGIC)) {
+    else if (energy > u.uen && u.tech_inuse[T_BLOOD_MAGIC]) {
         /* only can hit this case if using blood magic */
         energy -= u.uen;
         u.uen = 0;

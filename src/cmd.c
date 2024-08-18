@@ -3964,8 +3964,8 @@ int final;
     if (!u.ugifts)
         you_have_never("received any gifts");
     else {
-        Sprintf(buf, "recieved %d gift%s", u.ugifts,
-                (u.ugifts > 1L) ? "es" : "");
+        Sprintf(buf, "received %d gift%s", u.ugifts,
+                (u.ugifts > 1L) ? "s" : "");
         you_have_X(buf);
     }
 

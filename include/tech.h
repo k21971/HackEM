@@ -100,7 +100,14 @@ struct blitz_tab {
 #define T_UPPERCUT          54
 #define T_ICEARMOR          55
 #define T_SPECIALTY			56
+#define T_BODY_SHAPING      57
+#define T_ABSORB_ARMOR      58
+#define T_ABSORB_WEAPON     59
+#define T_APPLY_HARD        60
+#define T_APPLY_SWIFT       61
+#define T_APPLY_ENERGY      62
+#define T_APPLY_MOVE        63
 
-#define MAXTECH             57
+#define MAXTECH             64
 
 #endif /* TECH_H */

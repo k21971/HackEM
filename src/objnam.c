@@ -1053,6 +1053,9 @@ unsigned cxn_flags; /* bitmask of CXN_xxx values */
             } else {
                 xcalled(buf, BUFSZ - PREFIX, "", un);
             }
+			if (typ == POT_BLOOD && omndx) {
+                blood_details(obj, omndx, buf);
+            }
         } else {
             Strcat(buf, dn);
             Strcat(buf, Role_if(PM_PIRATE) ? " bottle": " potion");

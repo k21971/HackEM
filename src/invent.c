@@ -3983,7 +3983,7 @@ register struct obj *otmp, *obj;
         (obj->oerodeproof != otmp->oerodeproof || obj->rknown != otmp->rknown))
         return FALSE;
 
-    if (obj->otyp == CORPSE || obj->otyp == EGG || obj->otyp == TIN) {
+    if (obj->otyp == CORPSE || obj->otyp == EGG || obj->otyp == TIN || obj->otyp == POT_BLOOD) {
         if (obj->corpsenm != otmp->corpsenm)
             return FALSE;
     }

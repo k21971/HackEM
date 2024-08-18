@@ -783,6 +783,7 @@ E struct obj *FDECL(floorfood, (const char *, int));
 E boolean FDECL(can_sacrifice, (int));
 E void NDECL(vomit);
 E int FDECL(eaten_stat, (int, struct obj *));
+E void FDECL(givit, (int, struct permonst *));
 E void FDECL(food_disappears, (struct obj *));
 E void FDECL(food_substitution, (struct obj *, struct obj *));
 E boolean FDECL(bite_monster, (struct monst *mon));
@@ -798,6 +799,7 @@ E boolean FDECL(maybe_finished_meal, (BOOLEAN_P));
 E void FDECL(set_tin_variety, (struct obj *, int));
 E int FDECL(tin_variety_txt, (char *, int *));
 E void FDECL(tin_details, (struct obj *, int, char *));
+E void FDECL(blood_details, (struct obj *, int, char *));
 E boolean FDECL(Popeye, (int));
 
 /* ### end.c ### */

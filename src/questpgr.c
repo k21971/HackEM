@@ -699,6 +699,9 @@ deliver_splev_message()
             /* convert_line() expects encrypted input */
             (void) xcrypt(in_line, in_line);
             convert_line(in_line, out_line);
+			if (!u.uachieve.finish_sokoban && In_sokoban(&u.uz)) {
+                Sprintf(u.sokoname, "%s", out_line);
+            }
             pline("%s", out_line);
 
             if ((nl = index(str, '\n')) == 0)

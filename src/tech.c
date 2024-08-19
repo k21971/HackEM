@@ -215,6 +215,7 @@ static const struct innate_tech
 		/* 5lo: for Dark Knights */
 	drk_tech[] = { 
 		{ 1, T_SOULEATER, 1 },
+		{ 1, T_PRACTICE, 1 },
 		{ 0, 0, 0 } 
 	},
 	mon_tech[] = { 

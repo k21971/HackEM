@@ -1511,13 +1511,13 @@ int after; /* this is extra fast monster movement */
         if (ret == 2)
             return 1; /* did something */
     } else if ((attacktype(mtmp->data, AT_BREA)
-        || attacktype(mtmp->data, AT_GAZE)
-        || attacktype(mtmp->data, AT_SPIT)
-        || (attacktype(mtmp->data, AT_MAGC)
-        && (((attacktype_fordmg(mtmp->data, AT_MAGC, AD_ANY))->adtyp <= AD_PSYC)))
-            || (attacktype(mtmp->data, AT_WEAP)
-            && select_rwep(mtmp)))
-            && mtmp->mlstmv != monstermoves) {
+		|| attacktype(mtmp->data, AT_GAZE)
+                || attacktype(mtmp->data, AT_SPIT)
+                || (attacktype(mtmp->data, AT_MAGC)
+                    && (((attacktype_fordmg(mtmp->data, AT_MAGC, AD_ANY))->adtyp <= AD_PSYC)))
+                || (attacktype(mtmp->data, AT_WEAP)
+                    && select_rwep(mtmp)))
+               && mtmp->mlstmv != monstermoves) {
         struct monst *mon = mfind_target(mtmp);
         if (mon && (mon != &youmonst) &&
             acceptable_pet_target(mtmp, mon, TRUE)) {

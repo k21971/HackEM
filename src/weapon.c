@@ -1926,6 +1926,7 @@ int skill;
           && skill != P_BOOMERANG) {
     	learntech(T_DISARM, FROMOUTSIDE, 1);
     	You("learn how to perform disarm!");
+		u.bodyshapehold = 10;
     }
     if (!tech_known(T_POWER_SHIELD)
         && skill == P_SHIELD && P_SKILL(skill) == P_SKILLED) {

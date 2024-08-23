@@ -194,6 +194,9 @@ boolean resuming;
     for (i = 1; i <= u.ulevel; i++) {
 		u.tempulevel = i;
 		adjtech(i - 1, i);
+		if (u.bodyshapehold == i) {
+			learntech(T_DISARM, FROMOUTSIDE, 1);
+		}
 	}
 	u.tempulevel = 0;
     if (flags.quest_boon) {

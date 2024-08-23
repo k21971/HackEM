@@ -913,6 +913,10 @@ gcrownu()
             in_hand = wielding_artifact(ART_MJOLLNIR);
             already_exists =
                 exist_artifact(HEAVY_WAR_HAMMER, artiname(ART_MJOLLNIR));
+		} else if (Role_if(PM_KNIGHT) && Race_if(PM_VAMPIRIC)) {
+            in_hand = wielding_artifact(ART_DIRGE);
+            already_exists =
+                exist_artifact(LONG_SWORD, artiname(ART_DIRGE));
         } else {
             in_hand = wielding_artifact(ART_STORMBRINGER);
             already_exists =
@@ -923,11 +927,6 @@ gcrownu()
             livelog_printf(LL_DIVINEGIFT,
                            "was chosen to take lives for the Glory of %s",
                            u_gname());
-
-		} else if (Role_if(PM_KNIGHT) && Race_if(PM_VAMPIRIC)) {
-            in_hand = wielding_artifact(ART_DIRGE);
-            already_exists =
-                exist_artifact(RUNESWORD, artiname(ART_DIRGE));
         } else {
             verbalize("Thou art chosen to %s for My Glory!",
                       ((already_exists && !in_hand)

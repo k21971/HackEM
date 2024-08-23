@@ -654,6 +654,8 @@ int *tech_no;
 				Sprintf(nme, "Long Sword");
 			} else if (u.specialty == P_TWO_HANDED_SWORD) {
 				Sprintf(nme, "Two Handed Sword");
+			} else if (u.specialty == P_TWO_WEAPON_COMBAT) {
+				Sprintf(nme, "Two Weapon");
 			} else if (u.specialty == P_SABER) {
 				Sprintf(nme, "Saber");
 			} else if (u.specialty == P_CLUB) {
@@ -2318,6 +2320,8 @@ specialtychoice()
 		u.specialty = P_BROAD_SWORD;
 	} else if (!strcmpi(buf, "long sword")) {
 		u.specialty = P_LONG_SWORD;
+	} else if (!strcmpi(buf, "two weapon") || !strcmpi(buf, "two weapons") || !strcmpi(buf, "two weapon combat")) {
+		u.specialty = P_TWO_WEAPON_COMBAT;
 	} else if (!strcmpi(buf, "two handed sword") || !strcmpi(buf, "2-h sword")) {
 		u.specialty = P_TWO_HANDED_SWORD;
 	} else if (!strcmpi(buf, "saber")) {

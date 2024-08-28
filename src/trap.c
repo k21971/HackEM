@@ -4805,38 +4805,40 @@ crawl:
         pline("But in vain.");
     }
     u.uinwater = 1;
-    You("drown.");
-    
-    /* [ALI] Vampires return to vampiric form on drowning. */
-    if (Upolyd && !Unchanging && Race_if(PM_VAMPIRIC)) {
-        rehumanize();
-        u.uinwater = 0;
-        /* should be unnecessary as spoteffects() should get called */
-        /* You("fly up out of the water!"); */
-        return TRUE;
-    }
-    
-    for (i = 0; i < 5; i++) { /* arbitrary number of loops */
-        /* killer format and name are reconstructed every iteration
-           because lifesaving resets them */
-        pool_of_water = waterbody_name(u.ux, u.uy);
-        killer.format = KILLED_BY_AN;
-        /* avoid "drowned in [a] water" */
-        if (!strcmp(pool_of_water, "water"))
-            pool_of_water = "deep water", killer.format = KILLED_BY;
-        Strcpy(killer.name, pool_of_water);
-        done(DROWNING);
-        /* oops, we're still alive.  better get out of the water. */
-        if (safe_teleds(TELEDS_ALLOW_DRAG | TELEDS_TELEPORT))
-            break; /* successful life-save */
-        /* nowhere safe to land; repeat drowning loop... */
-        pline("You're still drowning.");
-    }
-    if (u.uinwater) {
-        u.uinwater = 0;
-        You("find yourself back %s.",
-            Is_waterlevel(&u.uz) ? "in an air bubble" : "on land");
-    }
+	if (!Breathless) {
+	    You("drown.");
+	    
+	    /* [ALI] Vampires return to vampiric form on drowning. */
+	    if (Upolyd && !Unchanging && Race_if(PM_VAMPIRIC)) {
+	        rehumanize();
+	        u.uinwater = 0;
+	        /* should be unnecessary as spoteffects() should get called */
+	        /* You("fly up out of the water!"); */
+	        return TRUE;
+	    }
+	    
+	    for (i = 0; i < 5; i++) { /* arbitrary number of loops */
+	        /* killer format and name are reconstructed every iteration
+	           because lifesaving resets them */
+	        pool_of_water = waterbody_name(u.ux, u.uy);
+	        killer.format = KILLED_BY_AN;
+	        /* avoid "drowned in [a] water" */
+	        if (!strcmp(pool_of_water, "water"))
+	            pool_of_water = "deep water", killer.format = KILLED_BY;
+	        Strcpy(killer.name, pool_of_water);
+	        done(DROWNING);
+	        /* oops, we're still alive.  better get out of the water. */
+	        if (safe_teleds(TELEDS_ALLOW_DRAG | TELEDS_TELEPORT))
+	            break; /* successful life-save */
+	        /* nowhere safe to land; repeat drowning loop... */
+	        pline("You're still drowning.");
+	    }
+	    if (u.uinwater) {
+	        u.uinwater = 0;
+	        You("find yourself back %s.",
+	            Is_waterlevel(&u.uz) ? "in an air bubble" : "on land");
+	    }
+	}
     return TRUE;
 }
 

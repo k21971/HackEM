@@ -253,7 +253,7 @@ char *genbuf;
                 break;
             case PM_WERESPIDER:
             case PM_HUMAN_WERESPIDER:
-                typ = rn2(5) ? PM_SNAKE : PM_PIT_VIPER;
+                typ = rn2(5) ? PM_CAVE_SPIDER : (rn2(3) ? PM_JUMPING_SPIDER : PM_GIANT_SPIDER);
                 if (genbuf) Strcpy(genbuf, "spider");
                 break;
             case PM_HUMAN_WEREBEAR:

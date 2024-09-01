@@ -3738,6 +3738,9 @@ int final;
     if (Fixed_abil) {
         you_have("fixed abilities", from_what(FIXED_ABIL));
 	}
+	if (using_oprop(ITEM_VIGIL)) {
+        you_have("vigilance", "");
+	}
 	if (ELifesaved) {
 		enl_msg("Your life ", "will be", "would have been", " saved", "");
 	}
@@ -3839,7 +3842,7 @@ int final;
         }
         if (p)
             enl_msg(You_, "have been killed ", p, buf, "");
-    }
+	}
 }
 
 /* ^X command */

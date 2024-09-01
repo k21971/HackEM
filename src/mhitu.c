@@ -880,7 +880,7 @@ register struct monst *mtmp;
         /* Scale with monster difficulty */
         ftmp = (int) ((mtmp->m_lev - 4) / 2) + 4;
         
-        if ((o = using_oprop(ITEM_VIGIL)) && !rn2(4)) {
+        if ((o = using_oprop(ITEM_VIGIL)) && rn2(3)) { /* changed from 25% to 67% success */
             You("evade their flanking attempt!");
             o->oprops_known |= ITEM_VIGIL;
         } else {

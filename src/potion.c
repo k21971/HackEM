@@ -215,7 +215,10 @@ boolean talk;
 {
     long old = HAfraid;
 
-    if (Unaware)
+	if (Fearless) {
+		return;
+	}
+	if (Unaware)
         talk = FALSE;
 
     if (!xtime && old) {

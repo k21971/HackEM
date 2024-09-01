@@ -1025,7 +1025,7 @@ struct attack *uattk;
         int race = (flags.female && urace.femalenum != NON_PM)
                     ? urace.femalenum : urace.malenum;
         struct attack *attacks = mons[race].mattk;
-        if (((Race_if(PM_ILLITHID)  || Race_if(PM_DRAUGR)) && rn2(4)) || Race_if(PM_CENTAUR))
+        if (((Race_if(PM_ILLITHID)  || Race_if(PM_DRAUGR)) && rn2(4)) || Race_if(PM_CENTAUR) || context.forcefight)
             return 0;
         for (i = 0; i < NATTK; i++) {
             if (attacks[i].aatyp != AT_WEAP && attacks[i].aatyp != AT_NONE) {
@@ -4402,19 +4402,17 @@ boolean weapon_attacks; /* skip weapon attacks if false */
                     You("cannot bite with this helm on.");
                 break;
             }
-            /* [ALI] Vampires are also smart. They avoid biting
-               monsters if doing so would be fatal */
-            if ((i > 0 && (is_vampire(youmonst.data) || Race_if(PM_DRAUGR)))
-                /* ... unless they are impaired */
-                && (!Stunned && !Hallucination)
+            /* avoid biting monsters if doing so would be fatal */
+            if ((!Stunned && !Hallucination)
                 && ((how_resistant(DISINT_RES) < 50
                         && (mon->data == &mons[PM_BLACK_DRAGON]
                             || mon->data == &mons[PM_ANTIMATTER_VORTEX]))
                     || is_rider(mon->data) 
                     || touch_petrifies(mon->data) 
                     || mon->data == &mons[PM_MEDUSA] 
-                    || mon->data == &mons[PM_GREEN_SLIME]))
+                    || mon->data == &mons[PM_GREEN_SLIME])) {
                 break;
+			}
             if (is_zombie(youmonst.data)
                 && mattk->aatyp == AT_BITE
                 && mon->data->msize <= MZ_SMALL
@@ -4436,9 +4434,22 @@ boolean weapon_attacks; /* skip weapon attacks if false */
                             || mon->data == &mons[PM_ANTIMATTER_VORTEX]))))
                 break;
             /*FALLTHRU*/
-        case AT_GAZE:
         case AT_KICK:
+            /*FALLTHRU*/
         case AT_BUTT:
+            /* avoid biting monsters if doing so would be fatal */
+            if ((!Stunned && !Hallucination)
+                && ((how_resistant(DISINT_RES) < 50
+                        && (mon->data == &mons[PM_BLACK_DRAGON]
+                            || mon->data == &mons[PM_ANTIMATTER_VORTEX]))
+                    || is_rider(mon->data) 
+                    || touch_petrifies(mon->data) 
+                    || mon->data == &mons[PM_MEDUSA] 
+                    || mon->data == &mons[PM_GREEN_SLIME])) {
+                break;
+			}
+            /*FALLTHRU*/
+        case AT_GAZE:
         /*weaponless:*/
             tmp = find_roll_to_hit(mon, mattk->aatyp, (struct obj *) 0,
                                    &attknum, &armorpenalty);

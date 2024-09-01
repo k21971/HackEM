@@ -6173,18 +6173,19 @@ boolean disarm;
                       the(xname(obj)));
             }
             if (yours) {
-                if (!Stunned || Stun_resistance) {
-                    if (Hallucination)
-                        pline("What a groovy feeling!");
-                    else
-                        You("%s%s...", stagger(youmonst.data, "stagger"),
-                            Halluc_resistance ? ""
-                                              : Blind ? " and get dizzy"
-                                                      : " and your vision blurs");
-                }
-                make_stunned((HStun & TIMEOUT) + (long) rn1(7, 16), FALSE);
-                (void) make_hallucinated(
-                    (HHallucination & TIMEOUT) + (long) rn1(5, 16), FALSE, 0L);
+				if (Breathless) {
+					You("don't breath it in and are not effected.");
+				} else {
+					if (!Stunned || Stun_resistance) {
+						if (Hallucination) {
+							pline("What a groovy feeling!");
+						} else {
+							You("%s%s...", stagger(youmonst.data, "stagger"), Halluc_resistance ? "" : Blind ? " and get dizzy" : " and your vision blurs");
+						}
+					}
+					make_stunned((HStun & TIMEOUT) + (long) rn1(7, 16), FALSE);
+					(void) make_hallucinated( (HHallucination & TIMEOUT) + (long) rn1(5, 16), FALSE, 0L);
+				}
             } else {
                 if (!(resists_stun(mon->data) || defended(mon, AD_STUN)))
                     mon->mstun = 1;

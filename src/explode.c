@@ -237,6 +237,9 @@ int expltype;
                     break;
                 case AD_LOUD:
                     explmask[i][j] = (how_resistant(SONIC_RES) > 50);
+					if (uarmh && uarmh->otyp == TOQUE) {
+						explmask[i][j] = TRUE;
+					}
                     physical_dmg = TRUE;
                     break;
                 default:

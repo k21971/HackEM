@@ -6,6 +6,20 @@ The changes are listed in reverse order so the newer changes are on top.
 
 1.3.2 changes:
 
+- Bite, Kick, and Butt attacks while polymorphed will not attack cockatrice or other insta-kill creatures if you aren't immune.
+
+- When attempting to steal and having extra attacks it will NOT do the extra attacks any more.
+
+- Changed "vigilant" items to have a 67% chance of avoiding being flanked instead of the too low 25%.
+
+- Vigilance displays in enlightenment now.
+
+- Wearing a toque gives you resistance to the "sonic boom" explosion damage.
+
+- Fearless should protect from all forms of fear now.
+
+- Being breathless makes you immune to the "billowing gas" traps on chests.
+
 - If your attack specialty is "bare handed/martial arts" and you know "martial arts" it will show "Martial Arts" instead of "Bare Handed" in the #tech menu when the specialty is set.
 
 - Techniques are refreshed turn by turn even if you don't act.  Everything else allows you to "sit and wait", I didn't see a reason techniques worked differently.  Plus it made it harder to do any testing :)
